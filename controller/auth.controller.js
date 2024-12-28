@@ -154,10 +154,11 @@ const signupAsAffiliate = async (req, res) => {
       if (!emailCheck.emailVerified) {
         const emailData = {
           email: emailCheck.email,
-          subject: "Account Activation & Doctor Application Successful Email",
+          subject:
+            "Account Activation & Affiliate Application Successful Email",
           html: `
                         <h1>Hello, ${emailCheck?.name || "User"}</h1>
-                        <p>Congrats, you have successfully applied for the doctor's position</p>
+                        <p>Congrats, you have successfully applied to become an affiliate. Please wait for the approval</p>
                         <p>Your email verification code is <h3>${emailVerifyCode}</h3></p>
                         
                       `,
