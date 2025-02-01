@@ -1,0 +1,3116 @@
+{
+	"info": {
+		"_postman_id": "ab454d14-5714-4ce0-bc4c-9ccebdbe93ec",
+		"name": "kennedy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38194436"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "signup as user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "powagiw217@matmayer.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "powagiw217@matmayer.com",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "powagiw217@matmayer.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/signup",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup as affiliate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "powagiw217@matmayer.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "powagiw217@matmayer.com",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "powagiw217@matmayer.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/signup-as-affiliate",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"signup-as-affiliate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "google signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImM4OGQ4MDlmNGRiOTQzZGY1M2RhN2FjY2ZkNDc3NjRkMDViYTM5MWYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDUxOTgxMTY5MTE5NjI5ODgzNTYiLCJlbWFpbCI6ImFiaXJ3ZXJrc0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IlRCQkJOR0pqM3g3UlRtT09FMktNQ0EiLCJpYXQiOjE3Mjk5NDI2MjIsImV4cCI6MTcyOTk0NjIyMn0.WLvejQyn7N690IuZqQ4Hzxk2SoAo1o-WhK2qnakl6ODt8GyAN8JpXP-QybJGRBuD4OX-SUW_9eZ73VhmCJ2B4kRKVF3LG3iyiVSumkuBRcAMkX6dZuUWB5uctea9W6P3TJ_-45F6j4_Rce8zd4t3yAdrR6I2zt3JdtGOBHjxJ9bxi3jrbOLLr87KCy69L3_bv_NXO-zUsSRbRMapGVUDrCh0ZBTx6O0W54OYG2Jf-lSLhxwwYmB8S_oaaObcXGr4s9Hbs_zqFKyBfE0W3IpYb-AiVRlbhCWgQkCNwdtvnYW-qpFWArS94yKn_gRYYsYW0bu9Ch470m6nsc8t_bioEg\",\r\n    \"provider\": \"google\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/auth/google-signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"auth",
+								"google-signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "google token id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IjczZTI1Zjk3ODkxMTljNzg3NWQ1ODA4N2E3OGFjMjNmNWVmMmVkYTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDUxOTgxMTY5MTE5NjI5ODgzNTYiLCJlbWFpbCI6ImFiaXJ3ZXJrc0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IlNBSjZzYmJ5Tlc1NU5xSjFuWm5pZ3ciLCJpYXQiOjE3Mjk5MzM0MTYsImV4cCI6MTcyOTkzNzAxNn0.pBqzXGIMYCbKK9WHtma0L7-NahAq4bWgoKuJRTd9CSCripLBFef-ixPxM66t6Ml-Aace8lZH-GpOl0NtUNbFfgYJ4JOAxqGjtCCSMPo5rxat0oGnDSTPl5cPYsXWgcwG_gHHg4ufsMV5peYkqb0MCaZn_RR_K_Vvqk-Mk1oBTZLV53mKH1k-bByOJ1Kku49-GFGEneHA_CRNsH8S2quWvkpZLTnzJgMmF9EMX-W4S4ChfUXabZV3Q2gl0qLOkbexcw4pIZcT_sRG_QS6ZvWQ1xT9DxCBmdKjUbFlgpuVzSAE7njajkzjkVGxyUvNr7LHBRDJMDn1IgEPKvVXymX5bg\",\r\n    \"provider\": \"google\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://oauth2.googleapis.com/token?client_id=480555588266-2bma8cipicgjrnlp87m8p4k595ldll5v.apps.googleusercontent.com&client_secret=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&code=4/0AVG7fiRFdZSUEHCZW2eGEblxniBs3nFJ2O9cLgZVOhkYoNPR3FkFoLp8Pkq69nUI_kRfuA&grant_type=authorization_code",
+							"protocol": "https",
+							"host": [
+								"oauth2",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "480555588266-2bma8cipicgjrnlp87m8p4k595ldll5v.apps.googleusercontent.com"
+								},
+								{
+									"key": "client_secret",
+									"value": "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"
+								},
+								{
+									"key": "code",
+									"value": "4/0AVG7fiRFdZSUEHCZW2eGEblxniBs3nFJ2O9cLgZVOhkYoNPR3FkFoLp8Pkq69nUI_kRfuA"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiOTE0ZDFhM2U4MGM0NDg3NzA1NTYiLCJuYW1lIjoic3VwZXJhZG1pbiIsImVtYWlsIjoic3VwZXJhZG1pbkBlbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCRPL2l6aHRKdXd3Zk01aHBnTzBJUFVlQUowOWdEcFVwZ1BDdnhVeUpPT3hhbVk5cXdyekNCbSIsInJvbGUiOiJzdXBlcmFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjp0cnVlLCJlbWFpbFZlcmlmeUNvZGUiOm51bGwsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUxMDMzNDksImV4cCI6MTczNTE4OTc0OX0.Tp7GkKycg_trLIVr9gwEYrbJgtjl1cirt6F1etbDF3s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "confirmPassword",
+									"value": "admin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/create-admin",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"create-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "superadmin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "emailVerifyCode",
+									"value": "4097",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/verify-email",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"verify-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "superadmin@email.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}users/auth/forgot-password",
+							"host": [
+								"{{baseURLKennedy}}users"
+							],
+							"path": [
+								"auth",
+								"forgot-password"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "superadmin@email.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "superadmin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "newPassword",
+									"value": "superadmin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "confirmPassword",
+									"value": "superadmin@email.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/reset-password",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "superadmin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "newPassword",
+									"value": "superadmin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "confirmPassword",
+									"value": "superadmin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "oldPassword",
+									"value": "superadmin@email.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/change-password",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "approve affiliate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZDQxMTk0MDI0OGMxZjFhMGQzZGUiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEJ6NllLWncvRDVsYjlmN1VFSnJyR3VJdHk5VFltVy9MYmYzNjBmTE91RG5JZEdja0lkZDdxIiwicm9sZSI6ImFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwiZW1haWxWZXJpZnlDb2RlIjoiNjIyOSIsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUzODA3NTEsImV4cCI6MTczNTQ2NzE1MX0.xmFV0mr5UkDSUbCBCBs96v0TkIESzrcHMqnIUx1t6A8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "affiliateId",
+									"value": "676fcce9cbfd6d3ccaa13c40",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/approve-affiliate",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"approve-affiliate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel affiliate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZDQxMTk0MDI0OGMxZjFhMGQzZGUiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEJ6NllLWncvRDVsYjlmN1VFSnJyR3VJdHk5VFltVy9MYmYzNjBmTE91RG5JZEdja0lkZDdxIiwicm9sZSI6ImFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwiZW1haWxWZXJpZnlDb2RlIjoiNjIyOSIsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUzODA3NTEsImV4cCI6MTczNTQ2NzE1MX0.xmFV0mr5UkDSUbCBCBs96v0TkIESzrcHMqnIUx1t6A8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "affiliateId",
+									"value": "676fcce9cbfd6d3ccaa13c40",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/cancel-affiliate",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"cancel-affiliate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login super admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "superadmin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "superadmin@email.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/login",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin@email.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/login",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "hekin90639@evusd.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hekin90639@evusd.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/login",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login as doctor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/auth/login-as-doctor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"auth",
+								"login-as-doctor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzAxMjdlZDdhZDNlZDJjNTNlNDg5YjEiLCJlbWFpbCI6ImRvY3RvckBlbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCRtSXZLYUovYkVrUEVGby5rLk90U2t1QnpNWUtaMUk4ck5HWHJMYWcyaVZHV2J4ZzUyNEtsNiIsInJvbGUiOiJwYXRpZW50IiwiZG9jdG9yQXBwbGljYXRpb25TdGF0dXMiOiJjYW5jZWxsZWQiLCJiYWxhbmNlIjowLCJuaHNOdW1iZXIiOiIxNzI4MTI5MDA1Njk2IiwiY29uc3VsdGF0aW9uSGlzdG9yeSI6W10sInVwY29taW5nSGlzdG9yeSI6W10sIm5vdGlmaWNhdGlvbnMiOlsiNjcwMTI3ZWQ3YWQzZWQyYzUzZTQ4OWIzIiwiNjcwMTI4MzU3YWQzZWQyYzUzZTQ4OWJjIiwiNjcwMTJiYjM3YWQzZWQyYzUzZTQ4OWMzIl0sImlzRG9jdG9yIjpmYWxzZSwiaXNWZXJpZmllZCI6ZmFsc2UsImlzQWN0aXZlIjp0cnVlLCJpc0xvY2tlZCI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMDVUMTE6NTA6MDUuNzAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMDVUMTI6MDY6MTEuMzYyWiIsIl9fdiI6MywiaWF0IjoxNzI4MTMwMDMwLCJleHAiOjE3MjgyMTY0MzB9.NBF_ykGxONDB9ubZsCNwcHtS4iq7B1upSU5tQP0HF6U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abir@email.com\",\r\n    \"password\": \"123456\",\r\n    \"nhsNumber\": \"211\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/auth/logout",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get all users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "superadmin",
+									"description": "[\"user\", \"admin\", \"superadmin\"]",
+									"disabled": true
+								},
+								{
+									"key": "isAffiliate",
+									"value": "false",
+									"description": "[true, false]",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one user by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/get-one-user/676be1b911f71449711061a7",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"get-one-user",
+								"676be1b911f71449711061a7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hekin",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0199999999",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (4).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/get-one-user/676be1b911f71449711061a7",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"get-one-user",
+								"676be1b911f71449711061a7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get own profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZTFiOTExZjcxNDQ5NzExMDYxYTciLCJuYW1lIjoiaGVraW4iLCJlbWFpbCI6Imhla2luOTA2MzlAZXZ1c2QuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAkcjdmaVB5QlpQWkRKd05Kc2k4OGZCLjhVQnN4b2QzSDh3RHlwME80MllNM0NZcS9xSW8uZk8iLCJyb2xlIjoidXNlciIsImFmZmlsaWF0ZUFwcGxpY2F0aW9uU3RhdHVzIjoiY2FuY2VsbGVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjp0cnVlLCJlbWFpbFZlcmlmeUNvZGUiOiIyMDI2IiwiaXNBY3RpdmUiOnRydWUsImltYWdlIjoicHVibGljL3VwbG9hZHMvaW1hZ2VzLzE3MzUxOTA0OTA0MDEtU2NyZWVuc2hvdCAoNCkucG5nIiwicGhvbmUiOiIwMTk5OTk5OTk5IiwiaWF0IjoxNzM1MTkwNjI3LCJleHAiOjE3MzUyNzcwMjd9.Oq3gawgqyDNMDSaekbPu3hJpnKQj5tq69k0wcU13EH4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "arafat",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0199999999",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (10).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/profile",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update profile by user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZTFiOTExZjcxNDQ5NzExMDYxYTciLCJuYW1lIjoiaGVraW4iLCJlbWFpbCI6Imhla2luOTA2MzlAZXZ1c2QuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAkcjdmaVB5QlpQWkRKd05Kc2k4OGZCLjhVQnN4b2QzSDh3RHlwME80MllNM0NZcS9xSW8uZk8iLCJyb2xlIjoidXNlciIsImFmZmlsaWF0ZUFwcGxpY2F0aW9uU3RhdHVzIjoiY2FuY2VsbGVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjp0cnVlLCJlbWFpbFZlcmlmeUNvZGUiOiIyMDI2IiwiaXNBY3RpdmUiOnRydWUsImltYWdlIjoicHVibGljL3VwbG9hZHMvaW1hZ2VzLzE3MzUxOTA0OTA0MDEtU2NyZWVuc2hvdCAoNCkucG5nIiwicGhvbmUiOiIwMTk5OTk5OTk5IiwiaWF0IjoxNzM1MTkwNjI3LCJleHAiOjE3MzUyNzcwMjd9.Oq3gawgqyDNMDSaekbPu3hJpnKQj5tq69k0wcU13EH4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hekin ",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0199999999",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (3).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/update-profile-by-user",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"update-profile-by-user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "book",
+			"item": [
+				{
+					"name": "get all books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/books/get-all-books",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"books",
+								"get-all-books"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "superadmin",
+									"description": "[\"user\", \"admin\", \"superadmin\"]",
+									"disabled": true
+								},
+								{
+									"key": "isAffiliate",
+									"value": "false",
+									"description": "[true, false]",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one book by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/books/get-book-by-id/676d1e0aa32c8ec18c35018a",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"books",
+								"get-book-by-id",
+								"676d1e0aa32c8ec18c35018a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZDQxMTk0MDI0OGMxZjFhMGQzZGUiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEJ6NllLWncvRDVsYjlmN1VFSnJyR3VJdHk5VFltVy9MYmYzNjBmTE91RG5JZEdja0lkZDdxIiwicm9sZSI6ImFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwiZW1haWxWZXJpZnlDb2RlIjoiNjIyOSIsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUyMDQwOTQsImV4cCI6MTczNTI5MDQ5NH0.TR_Qm8EUQyh8Yhgdp2ZlXk50NgB-l5VgmBi1mN1bXmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "bookName",
+									"value": "book name a",
+									"type": "text"
+								},
+								{
+									"key": "authorName",
+									"value": "author name a",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description a",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (10).png"
+								},
+								{
+									"key": "language",
+									"value": "english",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/books/add-book",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"books",
+								"add-book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZDQxMTk0MDI0OGMxZjFhMGQzZGUiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEJ6NllLWncvRDVsYjlmN1VFSnJyR3VJdHk5VFltVy9MYmYzNjBmTE91RG5JZEdja0lkZDdxIiwicm9sZSI6ImFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwiZW1haWxWZXJpZnlDb2RlIjoiNjIyOSIsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUyMDQwOTQsImV4cCI6MTczNTI5MDQ5NH0.TR_Qm8EUQyh8Yhgdp2ZlXk50NgB-l5VgmBi1mN1bXmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "bookName",
+									"value": "book name updated",
+									"type": "text"
+								},
+								{
+									"key": "authorName",
+									"value": "author name updated",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description updated",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (10).png"
+								},
+								{
+									"key": "language",
+									"value": "korean",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/books/update-book-by-id/676d1e0aa32c8ec18c35018a",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"books",
+								"update-book-by-id",
+								"676d1e0aa32c8ec18c35018a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZDQxMTk0MDI0OGMxZjFhMGQzZGUiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEJ6NllLWncvRDVsYjlmN1VFSnJyR3VJdHk5VFltVy9MYmYzNjBmTE91RG5JZEdja0lkZDdxIiwicm9sZSI6ImFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwiZW1haWxWZXJpZnlDb2RlIjoiNjIyOSIsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUyMDQwOTQsImV4cCI6MTczNTI5MDQ5NH0.TR_Qm8EUQyh8Yhgdp2ZlXk50NgB-l5VgmBi1mN1bXmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hekin ",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0199999999",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (3).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/books/delete-book-by-id/676d1e0aa32c8ec18c35018a",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"books",
+								"delete-book-by-id",
+								"676d1e0aa32c8ec18c35018a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "podcast",
+			"item": [
+				{
+					"name": "get all podcasts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/podcasts/get-all-podcasts",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"podcasts",
+								"get-all-podcasts"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "superadmin",
+									"description": "[\"user\", \"admin\", \"superadmin\"]",
+									"disabled": true
+								},
+								{
+									"key": "isAffiliate",
+									"value": "false",
+									"description": "[true, false]",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one podcast by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/podcasts/get-podcast-by-id/676d2dbe0b8e8727ea21bd0d",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"podcasts",
+								"get-podcast-by-id",
+								"676d2dbe0b8e8727ea21bd0d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add podcast",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZDQxMTk0MDI0OGMxZjFhMGQzZGUiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEJ6NllLWncvRDVsYjlmN1VFSnJyR3VJdHk5VFltVy9MYmYzNjBmTE91RG5JZEdja0lkZDdxIiwicm9sZSI6ImFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwiZW1haWxWZXJpZnlDb2RlIjoiNjIyOSIsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUyMDQwOTQsImV4cCI6MTczNTI5MDQ5NH0.TR_Qm8EUQyh8Yhgdp2ZlXk50NgB-l5VgmBi1mN1bXmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "podcastTitle",
+									"value": "podcast a",
+									"type": "text"
+								},
+								{
+									"key": "authorName",
+									"value": "podcast author name a",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "podcast description a",
+									"type": "text"
+								},
+								{
+									"key": "videoFile",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Downloads/tutorial.mov"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/podcasts/add-podcast",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"podcasts",
+								"add-podcast"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update podcast",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZDQxMTk0MDI0OGMxZjFhMGQzZGUiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEJ6NllLWncvRDVsYjlmN1VFSnJyR3VJdHk5VFltVy9MYmYzNjBmTE91RG5JZEdja0lkZDdxIiwicm9sZSI6ImFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwiZW1haWxWZXJpZnlDb2RlIjoiNjIyOSIsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUyMDQwOTQsImV4cCI6MTczNTI5MDQ5NH0.TR_Qm8EUQyh8Yhgdp2ZlXk50NgB-l5VgmBi1mN1bXmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "podcastTitle",
+									"value": "podcast name updated",
+									"type": "text"
+								},
+								{
+									"key": "authorName",
+									"value": "podcast authorName updated",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "podcast description updated",
+									"type": "text"
+								},
+								{
+									"key": "videoFile",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Downloads/tutorial.mov"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/podcasts/update-podcast-by-id/676d2dbe0b8e8727ea21bd0d",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"podcasts",
+								"update-podcast-by-id",
+								"676d2dbe0b8e8727ea21bd0d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete podcast",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZDQxMTk0MDI0OGMxZjFhMGQzZGUiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEJ6NllLWncvRDVsYjlmN1VFSnJyR3VJdHk5VFltVy9MYmYzNjBmTE91RG5JZEdja0lkZDdxIiwicm9sZSI6ImFkbWluIiwiYWZmaWxpYXRlQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiaXNBZmZpbGlhdGUiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjpmYWxzZSwiZW1haWxWZXJpZnlDb2RlIjoiNjIyOSIsImlzQWN0aXZlIjp0cnVlLCJpYXQiOjE3MzUyMDQwOTQsImV4cCI6MTczNTI5MDQ5NH0.TR_Qm8EUQyh8Yhgdp2ZlXk50NgB-l5VgmBi1mN1bXmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hekin ",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0199999999",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (3).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/podcasts/delete-podcast-by-id/676d2dbe0b8e8727ea21bd0d",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"podcasts",
+								"delete-podcast-by-id",
+								"676d2dbe0b8e8727ea21bd0d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "confession",
+			"item": [
+				{
+					"name": "get all confessions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/confessions/get-all-confessions",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"confessions",
+								"get-all-confessions"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "superadmin",
+									"description": "[\"user\", \"admin\", \"superadmin\"]",
+									"disabled": true
+								},
+								{
+									"key": "isAffiliate",
+									"value": "false",
+									"description": "[true, false]",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one confession by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/confessions/get-confession-by-id/676f937b815687eac0aeed2f",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"confessions",
+								"get-confession-by-id",
+								"676f937b815687eac0aeed2f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add confession",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZTFiOTExZjcxNDQ5NzExMDYxYTciLCJuYW1lIjoiaGVraW4gIiwiZW1haWwiOiJoZWtpbjkwNjM5QGV2dXNkLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHI3ZmlQeUJaUFpESndOSnNpODhmQi44VUJzeG9kM0g4d0R5cDBPNDJZTTNDWXEvcUlvLmZPIiwicm9sZSI6InVzZXIiLCJhZmZpbGlhdGVBcHBsaWNhdGlvblN0YXR1cyI6ImNhbmNlbGxlZCIsImJhbGFuY2UiOjAsImlzQWZmaWxpYXRlIjpmYWxzZSwiZW1haWxWZXJpZmllZCI6dHJ1ZSwiZW1haWxWZXJpZnlDb2RlIjoiMjAyNiIsImlzQWN0aXZlIjp0cnVlLCJpbWFnZSI6InB1YmxpYy91cGxvYWRzL2ltYWdlcy8xNzM1MTkwNzUzNDkzLVNjcmVlbnNob3QgKDMpLnBuZyIsInBob25lIjoiMDE5OTk5OTk5OSIsImlhdCI6MTczNTM2NTQxNiwiZXhwIjoxNzM1NDUxODE2fQ.FbwBFLC-9laGFBBnBOrWNPmxeP86tyYEw-Ao8KNoUCg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "confession a",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "confession description a",
+									"type": "text"
+								},
+								{
+									"key": "audioFile",
+									"type": "file",
+									"src": "/F:/METAL/Scorpions/1972 - Lonesome Crow/01. I'm Goin' Mad - Scorpions.mp3"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/confessions/add-confession",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"confessions",
+								"add-confession"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update confession",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZTFiOTExZjcxNDQ5NzExMDYxYTciLCJuYW1lIjoiaGVraW4gIiwiZW1haWwiOiJoZWtpbjkwNjM5QGV2dXNkLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHI3ZmlQeUJaUFpESndOSnNpODhmQi44VUJzeG9kM0g4d0R5cDBPNDJZTTNDWXEvcUlvLmZPIiwicm9sZSI6InVzZXIiLCJhZmZpbGlhdGVBcHBsaWNhdGlvblN0YXR1cyI6ImNhbmNlbGxlZCIsImJhbGFuY2UiOjAsImlzQWZmaWxpYXRlIjpmYWxzZSwiZW1haWxWZXJpZmllZCI6dHJ1ZSwiZW1haWxWZXJpZnlDb2RlIjoiMjAyNiIsImlzQWN0aXZlIjp0cnVlLCJpbWFnZSI6InB1YmxpYy91cGxvYWRzL2ltYWdlcy8xNzM1MTkwNzUzNDkzLVNjcmVlbnNob3QgKDMpLnBuZyIsInBob25lIjoiMDE5OTk5OTk5OSIsImlhdCI6MTczNTM2NTQxNiwiZXhwIjoxNzM1NDUxODE2fQ.FbwBFLC-9laGFBBnBOrWNPmxeP86tyYEw-Ao8KNoUCg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "confession a updated",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "confession description updated",
+									"type": "text"
+								},
+								{
+									"key": "audioFile",
+									"type": "file",
+									"src": "/F:/METAL/Scorpions/1972 - Lonesome Crow/01. I'm Goin' Mad - Scorpions.mp3"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/confessions/update-confession-by-id/676f937b815687eac0aeed2f",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"confessions",
+								"update-confession-by-id",
+								"676f937b815687eac0aeed2f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete confession",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzZiZTFiOTExZjcxNDQ5NzExMDYxYTciLCJuYW1lIjoiaGVraW4gIiwiZW1haWwiOiJoZWtpbjkwNjM5QGV2dXNkLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHI3ZmlQeUJaUFpESndOSnNpODhmQi44VUJzeG9kM0g4d0R5cDBPNDJZTTNDWXEvcUlvLmZPIiwicm9sZSI6InVzZXIiLCJhZmZpbGlhdGVBcHBsaWNhdGlvblN0YXR1cyI6ImNhbmNlbGxlZCIsImJhbGFuY2UiOjAsImlzQWZmaWxpYXRlIjpmYWxzZSwiZW1haWxWZXJpZmllZCI6dHJ1ZSwiZW1haWxWZXJpZnlDb2RlIjoiMjAyNiIsImlzQWN0aXZlIjp0cnVlLCJpbWFnZSI6InB1YmxpYy91cGxvYWRzL2ltYWdlcy8xNzM1MTkwNzUzNDkzLVNjcmVlbnNob3QgKDMpLnBuZyIsInBob25lIjoiMDE5OTk5OTk5OSIsImlhdCI6MTczNTM2NTQxNiwiZXhwIjoxNzM1NDUxODE2fQ.FbwBFLC-9laGFBBnBOrWNPmxeP86tyYEw-Ao8KNoUCg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hekin ",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0199999999",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (3).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/confessions/delete-confession-by-id/676f937b815687eac0aeed2f",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"confessions",
+								"delete-confession-by-id",
+								"676f937b815687eac0aeed2f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "appointment",
+			"item": [
+				{
+					"name": "get all appointments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdWx0YXRpb25VcGNvbWluZyI6W10sImVtYWlsVmVyaWZpZWQiOmZhbHNlLCJfaWQiOiI2NzAxMjcyMjUzN2UxNDk1OTliN2ZjMDgiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJFZDVHNaN0tJNS4uWEdvYS41b0xZU3VzdTVqTzVCcEhEb1R2NTFpVjl2eWhZN1IwTWkzWWp1Iiwicm9sZSI6ImFkbWluIiwiZG9jdG9yQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiY29uc3VsdGF0aW9uSGlzdG9yeSI6W10sInVwY29taW5nSGlzdG9yeSI6W10sIm5vdGlmaWNhdGlvbnMiOlsiNjcwMTI3ZWQ3YWQzZWQyYzUzZTQ4OWIzIiwiNjcwMTI4MzU3YWQzZWQyYzUzZTQ4OWJjIiwiNjcwMTJiYjM3YWQzZWQyYzUzZTQ4OWMzIiwiNjcwMzYwYTU2OTM2NjRkMjgyZWFiM2FhIl0sImlzRG9jdG9yIjpmYWxzZSwiaXNWZXJpZmllZCI6ZmFsc2UsImlzQWN0aXZlIjp0cnVlLCJpc0xvY2tlZCI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMDVUMTE6NDY6NDIuOTYzWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMDdUMDQ6MTY6MzcuMjQ0WiIsIl9fdiI6NCwic2VydmljZXMiOltdLCJpYXQiOjE3Mjk1MDcxNDAsImV4cCI6MTcyOTU5MzU0MH0.7VMfQk1Chc5YsvCWR_haBdtLnJPjdpBSM_mS-Q8lHRg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/get-all-appointments",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"get-all-appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one appointment by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/get-appointment-by-id/6704d4406f0ad3773c3d83e4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"get-appointment-by-id",
+								"6704d4406f0ad3773c3d83e4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get appointment by patient id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "patientId",
+									"value": "67020d51bf92bbc342325f6f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/get-appointment-by-patientId/67020d51bf92bbc342325f6f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"get-appointment-by-patientId",
+								"67020d51bf92bbc342325f6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get appointment by doctor id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "doctorId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/get-appointment-by-doctorId/67020d51bf92bbc342325f6f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"get-appointment-by-doctorId",
+								"67020d51bf92bbc342325f6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel appointment",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "appointmentId",
+									"value": "6704d4406f0ad3773c3d83e4",
+									"type": "text"
+								},
+								{
+									"key": "patientId",
+									"value": "67020d51bf92bbc342325f6f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/cancel-appointment-by-id/67020d51bf92bbc342325f6f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"cancel-appointment-by-id",
+								"67020d51bf92bbc342325f6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "complete appointment",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "appointmentId",
+									"value": "6704d4406f0ad3773c3d83e4",
+									"type": "text"
+								},
+								{
+									"key": "patientId",
+									"value": "67020d51bf92bbc342325f6f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/complete-appointment-by-id/6704d4406f0ad3773c3d83e4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"complete-appointment-by-id",
+								"6704d4406f0ad3773c3d83e4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "book/create an appointemnt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzE0OTVjNTYyN2M5ZDdhMjFiMDQwYjAiLCJuYW1lIjoiYmFob2JpaCIsImVtYWlsIjoiYmFob2JpaDU5OEBjaHlzaXIuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAkWm51dEtJQVFPUlJSVk5SSzVVdm80dXhZeXFtTjhpajliamJFNkY1MWxlMzVBaFNxdjREYXkiLCJyb2xlIjoicGF0aWVudCIsImRvY3RvckFwcGxpY2F0aW9uU3RhdHVzIjoibm90QXBwbGllZCIsImJhbGFuY2UiOjAsIm5oc051bWJlciI6IjE3Mjk0MDIzMDkzNDQiLCJjb25zdWx0YXRpb25IaXN0b3J5IjpbXSwiY29uc3VsdGF0aW9uVXBjb21pbmciOlsiNjcxNDk3YTUzNmYzNDJkODEyZGM1ZDVhIl0sInNlcnZpY2VzIjpbXSwibm90aWZpY2F0aW9ucyI6WyI2NzE0OTdhNjM2ZjM0MmQ4MTJkYzVkNWMiXSwiaXNEb2N0b3IiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjp0cnVlLCJlbWFpbFZlcmlmeUNvZGUiOm51bGwsImlzQWN0aXZlIjp0cnVlLCJpc0xvY2tlZCI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMjBUMDU6MzE6NDkuMzUwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMjBUMDU6Mzk6NTAuMTcwWiIsIl9fdiI6MSwiaWF0IjoxNzI5NDgyNzgzLCJleHAiOjE3Mjk1NjkxODN9.m_T2ep5SzOPaV5In-D57S_t-KuO_M2uuoA46MUZ82bc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "serviceId",
+									"value": "670240f95839c596faab28e2",
+									"type": "text"
+								},
+								{
+									"key": "patientId",
+									"value": "671495c5627c9d7a21b040b0",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "doctorId",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "dateTime",
+									"value": "2024-10-10T10:30:00.000Z",
+									"type": "text"
+								},
+								{
+									"key": "dayOfWeek",
+									"value": "sunday",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "video",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/book-service",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"book-service"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add zoom link",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "appointmentId",
+									"value": "6703b750cf49329d3dff7b13",
+									"type": "text"
+								},
+								{
+									"key": "zoomLink",
+									"value": "https://us05web.zoom.us/j/85704724161?pwd=mF1SCbPYYC7HjmWJBK5Sk9tYLYI6m5.1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "bahobih598@chysir.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/add-zoom-link",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"add-zoom-link"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzE0OTVjNTYyN2M5ZDdhMjFiMDQwYjAiLCJuYW1lIjoiYmFob2JpaCIsImVtYWlsIjoiYmFob2JpaDU5OEBjaHlzaXIuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAkWm51dEtJQVFPUlJSVk5SSzVVdm80dXhZeXFtTjhpajliamJFNkY1MWxlMzVBaFNxdjREYXkiLCJyb2xlIjoicGF0aWVudCIsImRvY3RvckFwcGxpY2F0aW9uU3RhdHVzIjoibm90QXBwbGllZCIsImJhbGFuY2UiOjAsIm5oc051bWJlciI6IjE3Mjk0MDIzMDkzNDQiLCJjb25zdWx0YXRpb25IaXN0b3J5IjpbXSwiY29uc3VsdGF0aW9uVXBjb21pbmciOlsiNjcxNDk3YTUzNmYzNDJkODEyZGM1ZDVhIl0sInNlcnZpY2VzIjpbXSwibm90aWZpY2F0aW9ucyI6WyI2NzE0OTdhNjM2ZjM0MmQ4MTJkYzVkNWMiXSwiaXNEb2N0b3IiOmZhbHNlLCJlbWFpbFZlcmlmaWVkIjp0cnVlLCJlbWFpbFZlcmlmeUNvZGUiOm51bGwsImlzQWN0aXZlIjp0cnVlLCJpc0xvY2tlZCI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMjBUMDU6MzE6NDkuMzUwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMjBUMDU6Mzk6NTAuMTcwWiIsIl9fdiI6MSwiaWF0IjoxNzI5NDgyNzgzLCJleHAiOjE3Mjk1NjkxODN9.m_T2ep5SzOPaV5In-D57S_t-KuO_M2uuoA46MUZ82bc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "appointmentId",
+									"value": "6703b750cf49329d3dff7b13",
+									"type": "text"
+								},
+								{
+									"key": "zoomLink",
+									"value": "https://us05web.zoom.us/j/85704724161?pwd=mF1SCbPYYC7HjmWJBK5Sk9tYLYI6m5.1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "bahobih598@chysir.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/check-login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"check-login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payments",
+			"item": [
+				{
+					"name": "create payment intent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "appointmentId",
+									"value": "6715eb518613e96252b5d3f1",
+									"type": "text"
+								},
+								{
+									"key": "paymentMethodId",
+									"value": "pm_card_visa",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/payment/create-payment-intent",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"payment",
+								"create-payment-intent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one payment intent by id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "paymentId",
+									"value": "pi_3Q9jmXIE7z8j8FQD0QSzE7mF",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/payment/get-payment-intent",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"payment",
+								"get-payment-intent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all payment intents",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdWx0YXRpb25VcGNvbWluZyI6W10sImVtYWlsVmVyaWZpZWQiOmZhbHNlLCJfaWQiOiI2NzAxMjcyMjUzN2UxNDk1OTliN2ZjMDgiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJFZDVHNaN0tJNS4uWEdvYS41b0xZU3VzdTVqTzVCcEhEb1R2NTFpVjl2eWhZN1IwTWkzWWp1Iiwicm9sZSI6ImFkbWluIiwiZG9jdG9yQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiY29uc3VsdGF0aW9uSGlzdG9yeSI6W10sInVwY29taW5nSGlzdG9yeSI6W10sIm5vdGlmaWNhdGlvbnMiOlsiNjcwMTI3ZWQ3YWQzZWQyYzUzZTQ4OWIzIiwiNjcwMTI4MzU3YWQzZWQyYzUzZTQ4OWJjIiwiNjcwMTJiYjM3YWQzZWQyYzUzZTQ4OWMzIiwiNjcwMzYwYTU2OTM2NjRkMjgyZWFiM2FhIl0sImlzRG9jdG9yIjpmYWxzZSwiaXNWZXJpZmllZCI6ZmFsc2UsImlzQWN0aXZlIjp0cnVlLCJpc0xvY2tlZCI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMDVUMTE6NDY6NDIuOTYzWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMDdUMDQ6MTY6MzcuMjQ0WiIsIl9fdiI6NCwic2VydmljZXMiOltdLCJpYXQiOjE3Mjk0OTI3MjMsImV4cCI6MTcyOTU3OTEyM30.G3uakQlPLlqgX-037ez_WPUHN-rmu-tobC3Q3SPwKbI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "paymentId",
+									"value": "pi_3Q9jmXIE7z8j8FQD0QSzE7mF",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/payment/get-all-payment-intents",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"payment",
+								"get-all-payment-intents"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notes",
+			"item": [
+				{
+					"name": "get notes by appointment id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/note/get-notes-by-appointment/6704d4406f0ad3773c3d83e4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"note",
+								"get-notes-by-appointment",
+								"6704d4406f0ad3773c3d83e4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one appointment by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/get-appointment-by-id/6704d4406f0ad3773c3d83e4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"get-appointment-by-id",
+								"6704d4406f0ad3773c3d83e4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get appointment by patient id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "patientId",
+									"value": "67020d51bf92bbc342325f6f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/get-appointment-by-patientId/67020d51bf92bbc342325f6f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"get-appointment-by-patientId",
+								"67020d51bf92bbc342325f6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get appointment by doctor id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "doctorId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/appointment/get-appointment-by-doctorId/67020d51bf92bbc342325f6f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"appointment",
+								"get-appointment-by-doctorId",
+								"67020d51bf92bbc342325f6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add a note",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "appointmentId",
+									"value": "6704d4406f0ad3773c3d83e4",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "note title",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "note description",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/note/add-note",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"note",
+								"add-note"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit a note",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "note title updated",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "note description updated",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/note/edit-note/670788abd9b414c6b946fcf5",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"note",
+								"edit-note",
+								"670788abd9b414c6b946fcf5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a note",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/note/delete-note/670788abd9b414c6b946fcf5",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"note",
+								"delete-note",
+								"670788abd9b414c6b946fcf5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "review rating",
+			"item": [
+				{
+					"name": "get all reviews",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "doctorId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/all-reviews",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"all-reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one review by review id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "doctorId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/get-one-review/67133868c75ea4a61ba42ce3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"get-one-review",
+								"67133868c75ea4a61ba42ce3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get review by user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "670b4e40ce98760d0778097f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/review-by-user",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"review-by-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add a review rating",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "review",
+									"value": "what a nice website",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "670b4e40ce98760d0778097f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/add-review",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"add-review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a review rating",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "review",
+									"value": "again and again",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "670b4e40ce98760d0778097f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/update-review/67133868c75ea4a61ba42ce3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"update-review",
+								"67133868c75ea4a61ba42ce3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a review rating",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "review",
+									"value": "again and again",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "670b4e40ce98760d0778097f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/delete-review/67133868c75ea4a61ba42ce3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"delete-review",
+								"67133868c75ea4a61ba42ce3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "terms of service",
+			"item": [
+				{
+					"name": "get all terms of services",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "doctorId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/terms-of-service/get-terms-of-service",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"terms-of-service",
+								"get-terms-of-service"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add terms of service",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "content",
+									"value": "Terms of service (also known as terms of use and terms and conditions, commonly abbreviated as TOS or ToS, ToU or T&C) are the legal agreements between a service provider and a person who wants to use that service. The person must agree to abide by the terms of service in order to use the offered service",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/terms-of-service/add-terms-of-service",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"terms-of-service",
+								"add-terms-of-service"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "faqs",
+			"item": [
+				{
+					"name": "add faq",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "question",
+									"value": "why should i use this",
+									"type": "text"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/faq/add-faq?question=why should i use this&answer=because this is amazing",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"faq",
+								"add-faq"
+							],
+							"query": [
+								{
+									"key": "question",
+									"value": "why should i use this"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all faqs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "question",
+									"value": "why should i use this",
+									"type": "text"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/faq/get-all-faqs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"faq",
+								"get-all-faqs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update faq",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/faq/update-faq?faqId=671377457972711a62117aa8&question=updated question&answer=updated answer",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"faq",
+								"update-faq"
+							],
+							"query": [
+								{
+									"key": "faqId",
+									"value": "671377457972711a62117aa8"
+								},
+								{
+									"key": "question",
+									"value": "updated question"
+								},
+								{
+									"key": "answer",
+									"value": "updated answer"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete an faq",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "question",
+									"value": "why should i use this",
+									"type": "text"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/faq/delete-faq/6713783a86dc46f0be7e470e",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"faq",
+								"delete-faq",
+								"6713783a86dc46f0be7e470e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chats / messages",
+			"item": [
+				{
+					"name": "access/create chats",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/chats/access-chat/67020d51bf92bbc342325f6f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"chats",
+								"access-chat",
+								"67020d51bf92bbc342325f6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all chats of a user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/chats/get-users-all-chat/67020d51bf92bbc342325f6f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"chats",
+								"get-users-all-chat",
+								"67020d51bf92bbc342325f6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all messages of a chat",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "chatId",
+									"value": "670604da1b64cee4e5085c85",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/chats/fetch-messages",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"chats",
+								"fetch-messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "chatId",
+									"value": "670604da1b64cee4e5085c85",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "hi doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/chats/send-message/67020d51bf92bbc342325f6f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"chats",
+								"send-message",
+								"67020d51bf92bbc342325f6f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notification",
+			"item": [
+				{
+					"name": "get notificaion by userId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "676be1b911f71449711061a7",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/notifications-by-user",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"notifications-by-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all notificaions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "67012722537e149599b7fc08",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURLKennedy}}/users/all-notifications",
+							"host": [
+								"{{baseURLKennedy}}"
+							],
+							"path": [
+								"users",
+								"all-notifications"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURLKennedy",
+			"value": "http://localhost:3002"
+		}
+	]
+}
