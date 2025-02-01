@@ -46,7 +46,7 @@ const addConfession = async (req, res) => {
   }
 };
 
-const updatePodcastById = async (req, res) => {
+const updateConfessionById = async (req, res) => {
   try {
     if (!req.params.id) {
       return res
@@ -96,7 +96,7 @@ const updatePodcastById = async (req, res) => {
   }
 };
 
-const getAllPodcasts = async (req, res) => {
+const getAllConfessions = async (req, res) => {
   try {
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
@@ -135,7 +135,7 @@ const getAllPodcasts = async (req, res) => {
   }
 };
 
-const getPodcastById = async (req, res) => {
+const getConfessionById = async (req, res) => {
   try {
     if (!req.params.id) {
       return res
@@ -158,7 +158,7 @@ const getPodcastById = async (req, res) => {
   }
 };
 
-const deletePodcastById = async (req, res) => {
+const deleteConfessionById = async (req, res) => {
   try {
     if (!req.params.id) {
       return res
@@ -240,9 +240,9 @@ const enableServiceById = async (req, res) => {
 };
 
 module.exports = {
-  addPodcast: addConfession,
-  getAllPodcasts,
-  getPodcastById,
-  updatePodcastById,
-  deletePodcastById,
+  addConfession,
+  getAllConfessions,
+  getConfessionById,
+  updateConfessionById,
+  deleteConfessionById,
 };
