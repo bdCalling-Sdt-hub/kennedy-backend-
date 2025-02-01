@@ -398,9 +398,14 @@ const verifyEmail = async (req, res) => {
     user.emailVerified = true;
     user.emailVerifyCode = null;
     await user.save();
+
+    const token = jwt.sign(newUser.toObject(), process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+    res.setHeader("Authorization", token);
     return res
       .status(HTTP_STATUS.OK)
-      .send(success("Email verified successfully"));
+      .send(success("Email verified successfully", { token }));
   } catch (err) {
     console.log(err);
     return res
@@ -655,72 +660,6 @@ const login = async (req, res) => {
   }
 };
 
-// const loginAsDoctor = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     // check if email & pass exist
-//     if (!email || !password) {
-//       return res
-//         .status(HTTP_STATUS.BAD_REQUEST)
-//         .send(failure("please provide mail and password"));
-//     }
-
-//     // fetching the fields
-//     const user = await User.findOne({ email }).select("+password");
-
-//     // object conversion
-//     const userObj = user.toObject();
-
-//     // when the user doesnt exist or pass dont match
-//     if (!user || !(await bcrypt.compare(password, user.password))) {
-//       return res
-//         .status(HTTP_STATUS.BAD_REQUEST)
-//         .send(failure("wrong email or password"));
-//     }
-
-//     if (user.affiliateApplicationStatus === "pending") {
-//       return res
-//         .status(HTTP_STATUS.BAD_REQUEST)
-//         .send(
-//           failure("Your account is not approved yet. Please wait for approval")
-//         );
-//     }
-
-//     if (user.affiliateApplicationStatus === "cancelled") {
-//       return res
-//         .status(HTTP_STATUS.BAD_REQUEST)
-//         .send(
-//           failure("Your request has been cancelled. Please try again later")
-//         );
-//     }
-
-//     // token
-//     const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, {
-//       expiresIn: process.env.JWT_EXPIRES_IN,
-//     });
-
-//     // deleting unnecessary fields
-//     user.password = undefined;
-//     delete userObj.password;
-//     delete userObj.wrongAttempts;
-//     delete userObj.isLocked;
-//     delete userObj.lockedTill;
-//     delete userObj.createdAt;
-//     delete userObj.updatedAt;
-//     delete userObj.__v;
-
-//     res.setHeader("Authorization", token);
-//     return res
-//       .status(HTTP_STATUS.OK)
-//       .send(success("Logged in successfully", { user, token }));
-//   } catch (err) {
-//     return res
-//       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-//       .send(failure("Internal server error"));
-//   }
-// };
-
 const logout = async (req, res) => {
   try {
     const token = req.headers.authorization
@@ -877,7 +816,6 @@ module.exports = {
   cancelAffiliate,
   login,
   createAdmin,
-  // loginAsDoctor,
   logout,
   verifyEmail,
   forgotPassword,
