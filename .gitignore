@@ -30,7 +30,3 @@ uploads/videos
 config/uploads/videos
 public/uploads/images
 
-routes
-controller
-model
-public

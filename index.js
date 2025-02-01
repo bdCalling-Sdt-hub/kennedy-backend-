@@ -10,20 +10,18 @@ const AuthRouter = require("./routes/auth.route");
 const BookRouter = require("./routes/book.route");
 const PodcastRouter = require("./routes/podcast.route");
 const ConfessionRouter = require("./routes/confession.route");
-const ServiceRouter = require("./routes/service.route");
-const AppointmentRouter = require("./routes/appointment.route");
+
 const ChatRouter = require("./routes/chat.route");
-const NoteRouter = require("./routes/note.route");
-const PaymentRouter = require("./routes/payment.route");
+
+// const PaymentRouter = require("./routes/payment.route");
 const ReviewRouter = require("./routes/review.route");
 const termsOfServiceRouter = require("./routes/termsOfService.route");
 const faqRouter = require("./routes/faq.route");
-const prescriptionRouter = require("./routes/prescription.route");
+
 const tipRouter = require("./routes/tip.route");
 const notificationRouter = require("./routes/notification.route");
 const helpRouter = require("./routes/help.route");
 const aboutUsRouter = require("./routes/aboutUs.route");
-const availabilityRouter = require("./routes/availability.route");
 
 const app = express();
 
@@ -61,11 +59,9 @@ app.use("/users", AuthRouter);
 app.use("/books", BookRouter);
 app.use("/podcasts", PodcastRouter);
 app.use("/confessions", ConfessionRouter);
-app.use("/service", ServiceRouter);
-app.use("/appointment", AppointmentRouter);
-app.use("/payment", PaymentRouter);
-app.use("/note", NoteRouter);
-app.use("/prescription", prescriptionRouter);
+
+// app.use("/payment", PaymentRouter);
+
 app.use("/chats", ChatRouter);
 app.use("/review", ReviewRouter);
 app.use("/terms-of-service", termsOfServiceRouter);
@@ -74,7 +70,6 @@ app.use("/tip", tipRouter);
 app.use("/notification", notificationRouter);
 app.use("/help", helpRouter);
 app.use("/about-us", aboutUsRouter);
-app.use("/availability", availabilityRouter);
 
 // Route to handle all other invalid requests
 
