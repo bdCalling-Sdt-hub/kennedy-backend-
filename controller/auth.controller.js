@@ -809,6 +809,44 @@ const changePassword = async (req, res) => {
       .send(failure("Internal server error"));
   }
 };
+
+const sendOTPAgain = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Please provide email"));
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("User with this email does not exist"));
+    }
+    const emailVerifyCode = generateRandomCode(4); //4 digits
+    user.emailVerifyCode = emailVerifyCode;
+
+    await user.save();
+
+    const emailData = {
+      email,
+      subject: "OTP Verification",
+      html: `
+        <h6>Hello, ${user.name || "User"}</h6>
+        <p>Your OTP is <h6>${otp}</h6> to verify your email</p>
+        <small>This OTP is valid for 5 minutes</small>
+      `,
+    };
+    await emailWithNodemailerGmail(emailData);
+    return res.status(HTTP_STATUS.OK).send(success("OTP sent successfully"));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
 module.exports = {
   signup,
   signupAsAffiliate,
@@ -821,4 +859,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   changePassword,
+  sendOTPAgain,
 };

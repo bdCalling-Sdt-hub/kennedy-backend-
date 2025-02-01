@@ -9,7 +9,7 @@ const {
   signupAsAffiliate,
   approveAffiliate,
   cancelAffiliate,
-  // loginAsDoctor,
+  sendOTPAgain,
   forgotPassword,
   resetPassword,
   changePassword,
@@ -97,6 +97,8 @@ routes.post("/auth/login", authValidator.login, login);
 
 // for logging in
 // routes.post("/auth/login-as-doctor", authValidator.login, loginAsDoctor);
+
+routes.post("/auth/send-otp-again", sendOTPAgain);
 
 // for logging in
 routes.post("/auth/logout", logout);
