@@ -35,16 +35,16 @@ routes.delete(
   deleteConfessionById
 );
 
-routes.put(
-  "/approve-confession-by-id/:id",
-  isAuthorizedAdmin,
-  approveConfessionById
-);
+// routes.put(
+//   "/approve-confession-by-id/:id",
+//   isAuthorizedAdmin,
+//   approveConfessionById
+// );
 
-routes.put(
-  "/cancel-confession-by-id/:id",
-  isAuthorizedAdmin,
-  cancelConfessionById
-);
+// routes.put(
+//   "/cancel-confession-by-id/:id",
+//   isAuthorizedAdmin,
+//   cancelConfessionById
+// );
 
 module.exports = routes;
