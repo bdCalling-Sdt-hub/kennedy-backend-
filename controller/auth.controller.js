@@ -399,7 +399,7 @@ const verifyEmail = async (req, res) => {
     user.emailVerifyCode = null;
     await user.save();
 
-    const token = jwt.sign(newUser.toObject(), process.env.JWT_SECRET, {
+    const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
     res.setHeader("Authorization", token);
