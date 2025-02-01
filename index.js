@@ -49,7 +49,7 @@ app.use((err, req, res, next) => {
   next();
 });
 
-const PORT = 3002;
+const PORT = 1010;
 
 app.use(status());
 
@@ -75,6 +75,18 @@ app.use("/about-us", aboutUsRouter);
 app.use("/availability", availabilityRouter);
 
 // Route to handle all other invalid requests
+
+app.get("/", (req, res) => {
+  return res.status(200).send({
+    name: "Kennedy Affiliate Book Selling Website",
+    developer: "Abir ",
+    version: "1.0.0",
+    description:
+      "This is a backend server for Kennedy Affiliate Book Selling Website",
+    status: "success",
+  });
+});
+
 app.use((req, res) => {
   return res.status(400).send({ message: "Route doesnt exist" });
 });
