@@ -7,6 +7,10 @@ const bookSchema = new Schema(
       type: String,
       required: true,
     },
+    pdfUrls: {
+      type: [String],
+      required: true,
+    },
     authorName: {
       type: String,
       required: true,
@@ -32,7 +36,7 @@ const bookSchema = new Schema(
       type: Number,
       //   required: true,
     },
-
+    stripePriceId: { type: String }, // Stripe Price ID
     rating: {
       type: Number,
       min: 0,
