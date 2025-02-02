@@ -9,9 +9,7 @@ const {
   deleteBookById,
 } = require("../controller/book.controller");
 
-const { userValidator, authValidator } = require("../middleware/validation");
 const { isAuthorizedAdmin } = require("../middleware/authValidationJWT");
-// const { authValidator } = require("../middleware/authValidation");
 
 routes.post("/add-book", isAuthorizedAdmin, fileUpload(), addBook);
 
