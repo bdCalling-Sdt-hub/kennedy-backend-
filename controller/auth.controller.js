@@ -834,7 +834,7 @@ const sendOTPAgain = async (req, res) => {
       subject: "OTP Verification",
       html: `
         <h6>Hello, ${user.name || "User"}</h6>
-        <p>Your OTP is <h6>${otp}</h6> to verify your email</p>
+        <p>Your OTP is <h6>${emailVerifyCode}</h6> to verify your email</p>
         <small>This OTP is valid for 5 minutes</small>
       `,
     };
