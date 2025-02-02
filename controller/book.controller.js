@@ -3,6 +3,8 @@ const HTTP_STATUS = require("../constants/statusCodes");
 const Book = require("../model/book.model");
 const User = require("../model/user.model");
 const Nootification = require("../model/notification.model");
+const fs = require("fs");
+const path = require("path"); // Ensure path is also required for file operations
 
 const addBook = async (req, res) => {
   try {
@@ -28,6 +30,12 @@ const addBook = async (req, res) => {
         imageFileName = `public/uploads/images/${req.files.image[0].filename}`;
         newBook.bookCoverImage = imageFileName;
       }
+    }
+    if (req.files && req.files["pdfFiles"]) {
+      const pdfUrls = req.files.pdfFiles.map(
+        (file) => `public/uploads/pdfs/${file.filename}`
+      );
+      newBook.pdfUrls = pdfUrls.length === 1 ? pdfUrls[0] : pdfUrls; // Store single or multiple PDF URLs
     }
     await newBook.save();
     return res
@@ -145,15 +153,27 @@ const deleteBookById = async (req, res) => {
     if (!req.params.id) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Please provide service id"));
+        .send(failure("Please provide book id"));
     }
-    const book = await Book.findByIdAndUpdate(
-      req.params.id,
-      { isDeleted: true },
-      { new: true }
-    );
+    const book = await Book.findByIdAndDelete(req.params.id);
     if (!book) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("book not found"));
+    }
+    if (book.pdfUrls && book.pdfUrls.length > 0) {
+      book.pdfUrls.forEach((pdfUrl) => {
+        try {
+          fs.unlinkSync(path.join(__dirname, "..", pdfUrl));
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+    if (book.bookCoverImage) {
+      try {
+        fs.unlinkSync(path.join(__dirname, "..", book.bookCoverImage));
+      } catch (err) {
+        console.error(err);
+      }
     }
     return res
       .status(HTTP_STATUS.OK)
