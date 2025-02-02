@@ -10,12 +10,14 @@ const configureFileUpload = () => {
         cb(null, path.join(__dirname, "../public/uploads/videos"));
       } else if (file.mimetype.startsWith("audio/")) {
         cb(null, path.join(__dirname, "../public/uploads/audios"));
+      } else if (file.mimetype === "application/pdf") {
+        cb(null, path.join(__dirname, "../public/uploads/pdfs"));
       } else {
         cb(new Error("Invalid file type"));
       }
     },
     filename: function (req, file, cb) {
-      const name = Date.now() + "-" + file.originalname;
+      const name = Date.now() + "-" + file.originalname.replace(/\s+/g, "_");
       cb(null, name);
     },
   });
@@ -27,6 +29,7 @@ const configureFileUpload = () => {
       "categoryImage",
       "videoFile",
       "audioFile",
+      "pdfFiles", // ✅ Added PDF field
     ];
 
     if (file.fieldname === undefined) {
@@ -36,7 +39,8 @@ const configureFileUpload = () => {
       if (
         file.mimetype.startsWith("image/") ||
         file.mimetype.startsWith("video/") ||
-        file.mimetype.startsWith("audio/")
+        file.mimetype.startsWith("audio/") ||
+        file.mimetype === "application/pdf"
       ) {
         cb(null, true);
       } else {
@@ -56,6 +60,7 @@ const configureFileUpload = () => {
     { name: "categoryImage", maxCount: 1 },
     { name: "videoFile", maxCount: 1 },
     { name: "audioFile", maxCount: 1 },
+    { name: "pdfFiles", maxCount: 5 }, // ✅ Added PDF field
   ]);
 
   return upload;
