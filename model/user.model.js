@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
+    subscriptionId: {
+      type: String,
+    },
+
     role: {
       type: String,
       enum: ["user", "admin", "superadmin"],
