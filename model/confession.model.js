@@ -29,6 +29,8 @@ const confessionSchema = new Schema(
       //   required: true,
     },
 
+    stripePriceId: { type: String }, // Stripe Price ID
+
     rating: {
       type: Number,
       min: 0,
