@@ -23,7 +23,7 @@ const podcastSchema = new Schema(
       type: Number,
       //   required: true,
     },
-
+    stripePriceId: { type: String }, // Stripe Price ID
     duration: {
       type: Number,
       //   required: true,
