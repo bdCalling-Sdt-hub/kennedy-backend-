@@ -6,6 +6,7 @@ const forumSchema = new Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     post: { type: String },
     audioPost: { type: String },
+    videoPost: { type: String },
 
     language: {
       type: String,
