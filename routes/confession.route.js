@@ -7,8 +7,6 @@ const {
   getConfessionById,
   updateConfessionById,
   deleteConfessionById,
-  approveConfessionById,
-  cancelConfessionById,
 } = require("../controller/confession.controller");
 
 const {
@@ -34,17 +32,5 @@ routes.delete(
   isAuthorizedUser,
   deleteConfessionById
 );
-
-// routes.put(
-//   "/approve-confession-by-id/:id",
-//   isAuthorizedAdmin,
-//   approveConfessionById
-// );
-
-// routes.put(
-//   "/cancel-confession-by-id/:id",
-//   isAuthorizedAdmin,
-//   cancelConfessionById
-// );
 
 module.exports = routes;
