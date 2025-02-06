@@ -25,8 +25,18 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
-    subscriptionId: {
-      type: String,
+    subscriptions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "SubscriptionPlan" },
+    ],
+
+    isBasicSubscribed: {
+      type: Boolean,
+      default: false,
+    },
+
+    isPremiumSubscribed: {
+      type: Boolean,
+      default: false,
     },
 
     role: {
@@ -34,6 +44,7 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin", "superadmin"],
       default: "user",
     },
+
     affiliateApplicationStatus: {
       type: String,
       enum: ["notApplied", "pending", "approved", "cancelled"],
