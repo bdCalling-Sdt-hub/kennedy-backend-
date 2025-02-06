@@ -23,7 +23,6 @@ routes.get("/get-subscription-by-id/:id", getSubscriptionById);
 routes.put(
   "/update-subscription-by-id/:id",
   //   isAuthorizedAdmin,
-
   updateSubscriptionById
 );
 
