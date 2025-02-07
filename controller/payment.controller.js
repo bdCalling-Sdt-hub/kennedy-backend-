@@ -2,29 +2,38 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const Transaction = require("../model/transaction.model");
 const User = require("../model/user.model");
+const Subscription = require("../model/subscriptionPlan.model");
 const HTTP_STATUS = require("../constants/statusCodes");
 const { success, failure } = require("../utilities/common");
 const { emailWithNodemailerGmail } = require("../config/email.config");
 
 const createPaymentIntent = async (req, res) => {
   try {
-    const { appointmentId, paymentMethodId, amount } = req.body;
+    const { subscriptionPlan, paymentMethodId, amount } = req.body;
 
-    if (!appointmentId || !paymentMethodId || !amount) {
+    if (!subscriptionPlan || !paymentMethodId || !amount) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
         .send(failure("please provide all the fields"));
     }
 
-    // Fetch the appointment details
-    const appointment = await Appointment.findById(appointmentId).populate(
-      "patientId"
-    );
+    // Fetch the Subscription details
+    const subscription = await Subscription.findOne({ name: subscriptionPlan });
 
-    if (!appointment) {
+    if (!subscription) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Appointment not found"));
+        .send(failure("subscription not found"));
+    }
+
+    if (!req.user || !req.user._id) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("please login"));
+    }
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
     }
 
     // Create a payment intent
@@ -36,6 +45,9 @@ const createPaymentIntent = async (req, res) => {
       payment_method: paymentMethodId,
       confirm: false, // Do not confirm automatically
     });
+
+    user.paymentIntent = paymentIntent.id;
+    await user.save();
 
     if (!paymentIntent) {
       return res
@@ -56,72 +68,75 @@ const createPaymentIntent = async (req, res) => {
 
 const confirmPaymentbyPaymentIntent = async (req, res) => {
   try {
-    const { paymentIntent, appointmentId } = req.body;
+    const { paymentIntent, subscriptionPlan } = req.body;
 
-    console.log("paymentIntent", paymentIntent);
-    console.log("appointmentId", appointmentId);
-
-    if (!paymentIntent || !appointmentId) {
+    if (!paymentIntent || !subscriptionPlan) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("please provide paymentIntent and appointmentId"));
     }
 
-    const appointment = await Appointment.findById(appointmentId).populate(
-      "patientId serviceId"
-    );
-
-    console.log("appointment", appointment);
-
-    if (!appointment) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Appointment not found"));
+    if (!req.user && !req.user._id) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("please login"));
     }
 
-    // Update the appointment with payment status
-    appointment.paymentStatus = "paid";
-    appointment.paymentId = paymentIntent.id;
-    await appointment.save();
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
+    }
+
+    const subscription = await Subscription.create({
+      name: subscriptionPlan,
+      paymentId: paymentIntent.id,
+      paymentStatus: "paid",
+      user: user._id,
+    });
+
+    if (!subscription) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Subscription could not be created"));
+    }
 
     // Create a new transaction
     const transaction = new Transaction({
-      user: appointment.patientId,
-      appointment: appointment._id,
+      user: req.user._id,
+      subscription: subscription._id,
       paymentId: paymentIntent.id,
       amount: paymentIntent.amount / 100,
       status: "paid",
     });
     await transaction.save();
 
-    console.log("paymentIntent", paymentIntent.amount);
-
-    console.log("transaction", transaction);
-
-    const service = await Service.findById(appointment.serviceId);
-    const selectedDateTime = new Date(appointment.dateTime).getTime();
-
-    if (service) {
-      // Remove the selected dateTime from the service's available times
-      service.dateTimes = service.dateTimes.filter(
-        (time) => new Date(time).getTime() !== selectedDateTime
+    user.subscriptions.push(subscription._id);
+    if (subscription.name === "basic") {
+      user.isBasicSubscribed = true;
+      subscription.startDate = new Date();
+      subscription.endDate = new Date(
+        new Date().getTime() + subscription.duration * 24 * 60 * 60 * 1000
       );
-      await service.save();
     }
 
-    const patientName = appointment.patientId.name || "patient";
-    const dateTime = new Date(appointment.dateTime).toLocaleString();
+    if (subscription.name === "premium") {
+      user.isPremiumSubscribed = true;
+      subscription.startDate = new Date();
+      subscription.endDate = new Date(
+        new Date().getTime() + subscription.duration * 24 * 60 * 60 * 1000
+      );
+    }
+    await user.save();
+
+    const userName = user.name || "user";
     const emailData = {
-      email: appointment.patientId.email,
+      email: userName.email,
       subject: "Payment processed successfully",
       html: `
-              <h2 style="color: #007BFF; text-align: center;">Appointment Confirmed</h2>
-              <p>Dear <strong>${patientName}</strong>,</p>
-              <p>Your appointment has been successfully booked</p>
-              <p style="padding: 8px 0;"><strong >Appointment Date & Time: </strong> ${dateTime}</p>
-              <p>You will recieve a zoom link soon!</p>
+              <h2 style="color: #007BFF; text-align: center;">Subscription Confirmed</h2>
+              <p>Dear <strong>${userName}</strong>,</p>
+              <p>Your Subscription has been successfully completed</p>
               <p>Best regards,</p>
-              <p><strong>My Doctor Clinic</strong></p>
+              <p><strong>Passenger Confession</strong></p>
             `,
     };
 
