@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
+    paymentIntent: {
+      type: String,
+    },
+
     subscriptions: [
       { type: mongoose.Schema.Types.ObjectId, ref: "SubscriptionPlan" },
     ],
