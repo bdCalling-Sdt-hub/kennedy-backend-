@@ -151,6 +151,28 @@ const getReviewByUserId = async (req, res) => {
   }
 };
 
+const getReviewsByBookId = async (req, res) => {
+  try {
+    const { bookId } = req.params;
+
+    const review = await Review.find({ book: bookId }).populate({
+      path: "user",
+      select: "name image",
+    });
+    if (!review) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("review could not be fetched"));
+    }
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("review fetched successfully", review));
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send(`internal server error`);
+  }
+};
+
 const editReview = async (req, res) => {
   try {
     const { review, rating, userId } = req.body;
@@ -213,10 +235,10 @@ const deleteReview = async (req, res) => {
 
 module.exports = {
   addReviewToBook,
-
   getAllReviews,
   getReviewByUserId,
   getReviewByReviewId,
+  getReviewsByBookId,
   editReview,
   deleteReview,
 };
