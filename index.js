@@ -23,6 +23,7 @@ const notificationRouter = require("./routes/notification.route");
 const helpRouter = require("./routes/help.route");
 const aboutUsRouter = require("./routes/aboutUs.route");
 const forumRouter = require("./routes/forum.route");
+const subscriptionRouter = require("./routes/subscription.route");
 
 const app = express();
 
@@ -72,6 +73,7 @@ app.use("/notification", notificationRouter);
 app.use("/help", helpRouter);
 app.use("/about-us", aboutUsRouter);
 app.use("/forum", forumRouter);
+app.use("/subscription", subscriptionRouter);
 
 // Route to handle all other invalid requests
 
