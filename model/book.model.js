@@ -37,6 +37,12 @@ const bookSchema = new Schema(
       //   required: true,
     },
     stripePriceId: { type: String }, // Stripe Price ID
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
     rating: {
       type: Number,
       min: 0,
