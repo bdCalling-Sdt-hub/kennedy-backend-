@@ -1,10 +1,10 @@
 const express = require("express");
 const routes = express();
-const { reviewValidator, userValidator } = require("../middleware/validation");
+
 const {
-  addReviewToWebsite,
+  addReviewToBook,
   editReview,
-  getAllWebsiteReviews,
+  getAllReviews,
   getReviewByReviewId,
   getReviewByUserId,
   deleteReview,
@@ -13,15 +13,16 @@ const {
 const { isAuthorizedUser } = require("../middleware/authValidationJWT");
 // const reviewValidator = require("../middleware/reviewValidation")
 
-routes.get("/all-reviews", getAllWebsiteReviews);
+routes.get("/all-reviews", getAllReviews);
 routes.get("/review-by-user", getReviewByUserId);
 routes.get("/get-one-review/:reviewId", getReviewByReviewId);
 
 routes.post(
-  "/add-review",
+  "/add-review-to-book",
   //   isAuthorizedUser,
   //   reviewValidator.addReview,
-  addReviewToWebsite
+  isAuthorizedUser,
+  addReviewToBook
 );
 
 routes.delete(
