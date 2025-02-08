@@ -26,13 +26,16 @@ const addConfession = async (req, res) => {
         .send(failure("podcast could not be added"));
     }
 
-    if (req.files && req.files["videoFile"]) {
-      let videoFileName = "";
-      if (req.files.videoFile[0]) {
+    console.log("req.files", req.files);
+    console.log("req.filesaudioFile", req.files["audioFile"]);
+
+    if (req.files && req.files["audioFile"]) {
+      let audioFileName = "";
+      if (req.files.audioFile[0]) {
         // Add public/uploads link to the image file
 
-        videoFileName = `public/uploads/videos/${req.files.videoFile[0].filename}`;
-        newConfession.podcastVideo = videoFileName;
+        audioFileName = `public/uploads/audios/${req.files.audioFile[0].filename}`;
+        newConfession.confessionAudioUrl = audioFileName;
       }
     }
     await newConfession.save();
@@ -40,6 +43,7 @@ const addConfession = async (req, res) => {
       .status(HTTP_STATUS.CREATED)
       .send(success("podcast added successfully", newConfession));
   } catch (err) {
+    console;
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .send(failure("error adding podcast", err.message));
