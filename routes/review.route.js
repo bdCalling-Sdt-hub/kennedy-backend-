@@ -7,6 +7,7 @@ const {
   getAllReviews,
   getReviewByReviewId,
   getReviewByUserId,
+  getReviewsByBookId,
   deleteReview,
 } = require("../controller/review.controller");
 // const { isAuthenticated, isAdmin } = require("../middleware/auth");
@@ -16,6 +17,7 @@ const { isAuthorizedUser } = require("../middleware/authValidationJWT");
 routes.get("/all-reviews", getAllReviews);
 routes.get("/review-by-user", getReviewByUserId);
 routes.get("/get-one-review/:reviewId", getReviewByReviewId);
+routes.get("/get-reviews-by-book/:bookId", getReviewsByBookId);
 
 routes.post(
   "/add-review-to-book",
