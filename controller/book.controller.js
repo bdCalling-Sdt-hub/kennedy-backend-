@@ -8,12 +8,20 @@ const path = require("path"); // Ensure path is also required for file operation
 
 const addBook = async (req, res) => {
   try {
-    const { bookName, authorName, description } = req.body;
+    const { bookName, authorName, description, languages } = req.body;
+
+    let languagesArray = [];
+    if (typeof languages === "string") {
+      languagesArray = languages.split(",").map((lang) => lang.trim());
+    } else if (Array.isArray(languages)) {
+      languagesArray = languages.filter((lang) => typeof lang === "string");
+    }
 
     const newBook = new Book({
       bookName,
       authorName,
       description,
+      languages: languagesArray,
     });
 
     if (!newBook) {
@@ -25,8 +33,6 @@ const addBook = async (req, res) => {
     if (req.files && req.files["image"]) {
       let imageFileName = "";
       if (req.files.image[0]) {
-        // Add public/uploads link to the image file
-
         imageFileName = `public/uploads/images/${req.files.image[0].filename}`;
         newBook.bookCoverImage = imageFileName;
       }
@@ -35,7 +41,7 @@ const addBook = async (req, res) => {
       const pdfUrls = req.files.pdfFiles.map(
         (file) => `public/uploads/pdfs/${file.filename}`
       );
-      newBook.pdfUrls = pdfUrls.length === 1 ? pdfUrls[0] : pdfUrls; // Store single or multiple PDF URLs
+      newBook.pdfUrls = pdfUrls.length === 1 ? pdfUrls[0] : pdfUrls;
     }
     await newBook.save();
     return res
@@ -65,14 +71,25 @@ const updateBookById = async (req, res) => {
     if (req.files && req.files["image"]) {
       let imageFileName = "";
       if (req.files.image[0]) {
-        // Add public/uploads link to the image file
-
         imageFileName = `public/uploads/images/${req.files.image[0].filename}`;
         book.bookCoverImage = imageFileName;
       }
     }
 
-    await book.save();
+    if (req.body.languages) {
+      let languagesArray;
+      if (
+        Array.isArray(req.body.languages) &&
+        req.body.languages.every((lang) => typeof lang === "string")
+      ) {
+        languagesArray = req.body.languages;
+      } else {
+        languagesArray = req.body.languages
+          .split(",")
+          .map((lang) => lang.trim());
+      }
+      req.body.languages = languagesArray;
+    }
 
     const updatedBook = await Book.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -82,7 +99,7 @@ const updateBookById = async (req, res) => {
     }
     return res
       .status(HTTP_STATUS.OK)
-      .send(success("Successfully updated book", book));
+      .send(success("Successfully updated book", updatedBook));
   } catch (error) {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)

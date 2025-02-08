@@ -23,8 +23,8 @@ const bookSchema = new Schema(
       type: String,
     },
 
-    language: {
-      type: String,
+    languages: {
+      type: [String],
     },
 
     price: {
