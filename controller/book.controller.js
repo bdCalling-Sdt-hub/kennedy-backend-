@@ -67,6 +67,7 @@ const updateBookById = async (req, res) => {
     }
     console.log("files", req.files);
     console.log("files", req.files["image"]);
+    console.log("files", req.files["pdfFiles"]);
 
     if (req.files && req.files["image"]) {
       let imageFileName = "";
@@ -74,6 +75,13 @@ const updateBookById = async (req, res) => {
         imageFileName = `public/uploads/images/${req.files.image[0].filename}`;
         book.bookCoverImage = imageFileName;
       }
+    }
+
+    if (req.files && req.files["pdfFiles"]) {
+      const pdfUrls = req.files.pdfFiles.map(
+        (file) => `public/uploads/pdfs/${file.filename}`
+      );
+      book.pdfUrls = pdfUrls.length === 1 ? pdfUrls[0] : pdfUrls;
     }
 
     if (req.body.languages) {
@@ -90,6 +98,8 @@ const updateBookById = async (req, res) => {
       }
       req.body.languages = languagesArray;
     }
+
+    await book.save();
 
     const updatedBook = await Book.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
