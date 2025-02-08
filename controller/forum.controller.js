@@ -106,7 +106,12 @@ const updatePostById = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Forum.find();
+    const posts = await Forum.find()
+      .populate({
+        path: "user",
+        select: "name  image",
+      })
+      .sort({ createdAt: -1 });
 
     const count = await Forum.countDocuments();
 
@@ -133,7 +138,7 @@ const getPostById = async (req, res) => {
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("Please provide post id"));
     }
-    const post = await Forum.findById(req.params.id);
+    const post = await Forum.findById(req.params.id).populate("user");
     if (!post) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("post not found"));
     }
@@ -154,7 +159,7 @@ const getPostByUserId = async (req, res) => {
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("Please Login to get post"));
     }
-    const posts = await Forum.find({ user: req.user._id });
+    const posts = await Forum.find({ user: req.user._id }).populate("user");
 
     const count = await Forum.countDocuments({ user: req.user._id });
 
