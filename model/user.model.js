@@ -88,6 +88,8 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
+    bookReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+
     isActive: {
       type: Boolean,
       default: true,
