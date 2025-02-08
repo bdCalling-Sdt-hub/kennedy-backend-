@@ -44,6 +44,13 @@ const podcastSchema = new Schema(
       default: 0,
     },
 
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
+
     isDeleted: {
       type: Boolean,
       default: false,

@@ -90,6 +90,12 @@ const userSchema = new mongoose.Schema(
 
     bookReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
 
+    confessionComments: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
+    ],
+
+    podcastComments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+
     isActive: {
       type: Boolean,
       default: true,
