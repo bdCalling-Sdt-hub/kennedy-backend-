@@ -3,6 +3,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Transaction = require("../model/transaction.model");
 const User = require("../model/user.model");
 const Subscription = require("../model/subscriptionPlan.model");
+const Affiliate = require("../model/affiliate.model");
 const HTTP_STATUS = require("../constants/statusCodes");
 const { success, failure } = require("../utilities/common");
 const { emailWithNodemailerGmail } = require("../config/email.config");
@@ -68,7 +69,30 @@ const createPaymentIntent = async (req, res) => {
 
 const confirmPaymentbyPaymentIntent = async (req, res) => {
   try {
-    const { paymentIntent, subscriptionPlan } = req.body;
+    const { paymentIntent, subscriptionPlan, affiliateCode } = req.body;
+
+    if (affiliateCode) {
+      const affiliate = await Affiliate.findOne({ affiliateCode });
+
+      if (!affiliate) {
+        return res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .send(failure("Affiliate not found"));
+      }
+
+      // Pay the affiliate 10% commission
+      if (affiliate && affiliate.stripeAccountId) {
+        const commission = price * 0.1; // 10% commission
+        await stripe.transfers.create({
+          amount: commission * 100,
+          currency: "usd",
+          destination: affiliate.stripeAccountId,
+        });
+
+        affiliate.totalEarnings += commission;
+        await affiliate.save();
+      }
+    }
 
     if (!paymentIntent || !subscriptionPlan) {
       return res
