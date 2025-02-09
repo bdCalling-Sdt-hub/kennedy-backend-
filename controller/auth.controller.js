@@ -4,8 +4,11 @@ const jwt = require("jsonwebtoken");
 const { success, failure, generateRandomCode } = require("../utilities/common");
 const User = require("../model/user.model");
 const Notification = require("../model/notification.model");
+const Affiliate = require("../model/affiliate.model");
 const HTTP_STATUS = require("../constants/statusCodes");
 const { emailWithNodemailerGmail } = require("../config/email.config");
+const crypto = require("crypto");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const signup = async (req, res) => {
   try {
@@ -416,7 +419,7 @@ const verifyEmail = async (req, res) => {
 
 const approveAffiliate = async (req, res) => {
   try {
-    const { affiliateId } = req.body; // doctorId of the user who applied
+    const { affiliateId, domain } = req.body;
 
     if (!affiliateId) {
       return res
@@ -430,7 +433,7 @@ const approveAffiliate = async (req, res) => {
         .send(failure("Unauthorized! Admin access only"));
     }
 
-    const affiliate = await User.findById(affiliateId);
+    const affiliate = await User.findById({ _id: affiliateId });
     const admin = await User.findOne({ email: req.user.email });
 
     if (!affiliate) {
@@ -439,14 +442,25 @@ const approveAffiliate = async (req, res) => {
         .send(failure("affiliate does not exist"));
     }
 
-    // if (doctor.doctorApplicationStatus !== "pending") {
-    //   return res
-    //     .status(HTTP_STATUS.BAD_REQUEST)
-    //     .send(failure("User did not apply for the doctor's position"));
-    // }
+    const referralCode = crypto.randomBytes(4).toString("hex");
+    const referralLink = `${domain}/referral/${referralCode}`; //referralLink
 
+    const newAffiliate = new Affiliate({
+      user: affiliate._id,
+      referralLink,
+      affiliateCode: referralCode,
+    });
+
+    await newAffiliate.save();
+
+    if (!newAffiliate) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Could not create affiliate"));
+    }
     affiliate.affiliateApplicationStatus = "approved";
     affiliate.isAffiliate = true;
+    affiliate.affiliate = newAffiliate._id;
     await affiliate.save();
 
     const emailData = {
@@ -506,6 +520,56 @@ const approveAffiliate = async (req, res) => {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .send(failure("Failed to approve affiliate application"));
+  }
+};
+
+const connectStripeAccount = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(HTTP_STATUS.UNAUTHORIZED).send(failure("please login"));
+    }
+    const affiliate = await Affiliate.findOne({ user: req.user._id });
+    console.log("affiliate", affiliate);
+    console.log("req.user._id", req.user._id);
+    if (!affiliate) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("affiliate does not exist"));
+    }
+
+    if (!affiliate.stripeAccountId) {
+      const account = await stripe.accounts.create({
+        type: "express",
+        country: "US",
+        email: req.user.email,
+        capabilities: { transfers: { requested: true } },
+      });
+      affiliate.stripeAccountId = account.id;
+      await affiliate.save();
+    }
+
+    // Generate Stripe account link for onboarding
+    const accountLink = await stripe.accountLinks.create({
+      account: affiliate.stripeAccountId,
+      refresh_url: `${process.env.FRONTEND_URL}/affiliate/profile`,
+      return_url: `${process.env.FRONTEND_URL}/affiliate/profile`,
+      type: "account_onboarding",
+    });
+
+    if (!accountLink) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Could not create account link"));
+    }
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("account link created", accountLink));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(`INTERNAL SERVER ERROR`);
   }
 };
 
@@ -850,6 +914,7 @@ const sendOTPAgain = async (req, res) => {
 module.exports = {
   signup,
   signupAsAffiliate,
+  connectStripeAccount,
   approveAffiliate,
   cancelAffiliate,
   login,

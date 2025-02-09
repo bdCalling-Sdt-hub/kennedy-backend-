@@ -7,6 +7,7 @@ const {
   login,
   logout,
   signupAsAffiliate,
+  connectStripeAccount,
   approveAffiliate,
   cancelAffiliate,
   sendOTPAgain,
@@ -44,6 +45,12 @@ routes.post(
   // userValidator.create,
   // authValidator.create,
   signupAsAffiliate
+);
+
+routes.post(
+  "/auth/connect-stripe-account",
+  isAuthorizedUser,
+  connectStripeAccount
 );
 
 routes.post(
