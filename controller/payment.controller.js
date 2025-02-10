@@ -2,7 +2,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const Transaction = require("../model/transaction.model");
 const User = require("../model/user.model");
-const Subscription = require("../model/subscriptionPlan.model");
+const SubscriptionPlan = require("../model/subscriptionPlan.model");
+const Subscription = require("../model/subscription.model");
 const Affiliate = require("../model/affiliate.model");
 const HTTP_STATUS = require("../constants/statusCodes");
 const { success, failure } = require("../utilities/common");
@@ -19,7 +20,9 @@ const createPaymentIntent = async (req, res) => {
     }
 
     // Fetch the Subscription details
-    const subscription = await Subscription.findOne({ name: subscriptionPlan });
+    const subscription = await SubscriptionPlan.findOne({
+      name: subscriptionPlan,
+    });
 
     if (!subscription) {
       return res
@@ -69,91 +72,98 @@ const createPaymentIntent = async (req, res) => {
 
 const confirmPaymentbyPaymentIntent = async (req, res) => {
   try {
-    const { paymentIntent, subscriptionPlan, affiliateCode } = req.body;
+    const { paymentIntentId, subscriptionPlan, affiliateCode, price } =
+      req.body;
 
-    if (affiliateCode) {
-      const affiliate = await Affiliate.findOne({ affiliateCode });
-
-      if (!affiliate) {
-        return res
-          .status(HTTP_STATUS.NOT_FOUND)
-          .send(failure("Affiliate not found"));
-      }
-
-      // Pay the affiliate 10% commission
-      if (affiliate && affiliate.stripeAccountId) {
-        const commission = price * 0.1; // 10% commission
-        await stripe.transfers.create({
-          amount: commission * 100,
-          currency: "usd",
-          destination: affiliate.stripeAccountId,
-        });
-
-        affiliate.totalEarnings += commission;
-        await affiliate.save();
-      }
+    if (!paymentIntentId || !subscriptionPlan) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Please provide paymentIntentId and subscriptionPlan"));
     }
 
-    if (!paymentIntent || !subscriptionPlan) {
+    if (!req.user || !req.user._id) {
+      return res.status(HTTP_STATUS.UNAUTHORIZED).send(failure("Please login"));
+    }
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    if (!paymentIntent) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("please provide paymentIntent and appointmentId"));
-    }
-
-    if (!req.user && !req.user._id) {
-      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("please login"));
+        .send(failure("Payment Intent not found"));
     }
 
     const user = await User.findById(req.user._id);
-
     if (!user) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
     }
 
+    const subscriptionPlanDetails = await SubscriptionPlan.findOne({
+      name: subscriptionPlan,
+    });
+    if (!subscriptionPlanDetails) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Subscription plan not found"));
+    }
+    let affiliate;
+    if (affiliateCode) {
+      affiliate = await Affiliate.findOne({ affiliateCode });
+      if (affiliate && affiliate.stripeAccountId) {
+        const commission = price * 0.1; // 10% commission
+        await stripe.transfers.create({
+          amount: commission * 100,
+          currency: paymentIntent.currency,
+          destination: affiliate.stripeAccountId,
+        });
+
+        affiliate.totalCommission += commission;
+        affiliate.totalReferrals += 1;
+        await affiliate.save();
+      }
+    }
+
     const subscription = await Subscription.create({
+      subscriptionPlan: subscriptionPlanDetails._id,
       name: subscriptionPlan,
       paymentId: paymentIntent.id,
       paymentStatus: "paid",
-      user: user._id,
+      buyer: user._id,
+      startDate: new Date(),
+      endDate: new Date(
+        new Date().getTime() +
+          subscriptionPlanDetails.duration * 24 * 60 * 60 * 1000
+      ),
     });
 
-    if (!subscription) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Subscription could not be created"));
-    }
-
-    // Create a new transaction
     const transaction = new Transaction({
-      user: req.user._id,
+      user: user._id,
       subscription: subscription._id,
       paymentId: paymentIntent.id,
       amount: paymentIntent.amount / 100,
       status: "paid",
     });
+
+    if (affiliateCode) {
+      const commission = price * 0.1; // 10% commission
+      transaction.affiliate = affiliate._id;
+      transaction.affiliateComission = commission;
+      subscription.affiliate = affiliate._id;
+      subscription.affiliateComission = commission;
+    }
     await transaction.save();
+    await subscription.save();
 
     user.subscriptions.push(subscription._id);
-    if (subscription.name === "basic") {
+    if (subscriptionPlan === "basic") {
       user.isBasicSubscribed = true;
-      subscription.startDate = new Date();
-      subscription.endDate = new Date(
-        new Date().getTime() + subscription.duration * 24 * 60 * 60 * 1000
-      );
-    }
-
-    if (subscription.name === "premium") {
+    } else if (subscriptionPlan === "premium") {
       user.isPremiumSubscribed = true;
-      subscription.startDate = new Date();
-      subscription.endDate = new Date(
-        new Date().getTime() + subscription.duration * 24 * 60 * 60 * 1000
-      );
     }
     await user.save();
 
     const userName = user.name || "user";
     const emailData = {
-      email: userName.email,
+      email: user.email,
       subject: "Payment processed successfully",
       html: `
               <h2 style="color: #007BFF; text-align: center;">Subscription Confirmed</h2>
