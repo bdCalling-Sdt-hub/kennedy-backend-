@@ -3,6 +3,7 @@ const routes = express();
 const {
   createPaymentIntent,
   createCustomer,
+  getAffiliateByCode,
   getPaymentIntent,
   getAllPaymentIntents,
   confirmPaymentbyPaymentIntent,
@@ -20,7 +21,7 @@ routes.post(
 );
 routes.post("/get-payment-intent", getPaymentIntent);
 routes.get("/get-all-payment-intents", isAuthorizedAdmin, getAllPaymentIntents);
-
+routes.get("/get-affiliate-by-code/:affiliateCode", getAffiliateByCode);
 routes.post("/create-customer", createCustomer);
 
 module.exports = routes;

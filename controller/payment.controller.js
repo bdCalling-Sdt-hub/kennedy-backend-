@@ -187,6 +187,26 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
   }
 };
 
+const getAffiliateByCode = async (req, res) => {
+  try {
+    const { affiliateCode } = req.params;
+    const affiliate = await Affiliate.findOne({ affiliateCode });
+    if (!affiliate) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Affiliate not found"));
+    }
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Affiliate retrieved successfully", affiliate));
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Affiliate failed", err.message));
+  }
+};
+
 const getPaymentIntent = async (req, res) => {
   try {
     const { paymentId } = req.body;
@@ -306,6 +326,7 @@ module.exports = {
   createPaymentIntent,
   createCustomer,
   createSubscription,
+  getAffiliateByCode,
   getPaymentIntent,
   getAllPaymentIntents,
   confirmPaymentbyPaymentIntent,
