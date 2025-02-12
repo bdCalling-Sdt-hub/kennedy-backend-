@@ -58,8 +58,8 @@ const updatePostById = async (req, res) => {
     if (!post) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("post not found"));
     }
-    console.log("files", req.files);
-    console.log("files", req.files["audioFile"]);
+    // console.log("files", req.files);
+    // console.log("files", req.files["audioFile"]);
 
     // remove previous file from storage if new file is added
     if (req.files && req.files["audioFile"]) {
