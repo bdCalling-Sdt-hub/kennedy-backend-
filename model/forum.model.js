@@ -25,6 +25,13 @@ const forumSchema = new Schema(
       type: Boolean,
       default: false,
     },
+
+    forumComments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   { timestamps: true }
 );
