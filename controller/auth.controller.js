@@ -544,7 +544,7 @@ const connectStripeAccount = async (req, res) => {
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("affiliate does not exist"));
     }
-
+    const { frontendURL } = req.body;
     if (!affiliate.stripeAccountId) {
       const account = await stripe.accounts.create({
         type: "express",
@@ -559,8 +559,8 @@ const connectStripeAccount = async (req, res) => {
     // Generate Stripe account link for onboarding
     const accountLink = await stripe.accountLinks.create({
       account: affiliate.stripeAccountId,
-      refresh_url: `${process.env.FRONTEND_URL}/affiliate/profile`,
-      return_url: `${process.env.FRONTEND_URL}/affiliate/profile`,
+      refresh_url: `${frontendURL}`,
+      return_url: `${frontendURL}`,
       type: "account_onboarding",
     });
 
