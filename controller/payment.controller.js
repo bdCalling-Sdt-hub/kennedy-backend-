@@ -118,6 +118,18 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
 
         affiliate.totalCommission += commission;
         affiliate.totalReferrals += 1;
+        if (affiliate.totalCommission >= 240000) {
+          affiliate.level = 1;
+        }
+        if (affiliate.totalCommission >= 500000) {
+          affiliate.level = 2;
+        }
+        if (affiliate.totalCommission >= 1000000) {
+          affiliate.level = 3;
+        }
+        if (affiliate.totalCommission >= 2000000) {
+          affiliate.level = 4;
+        }
         await affiliate.save();
       }
     }
@@ -247,6 +259,41 @@ const getAllPaymentIntents = async (req, res) => {
   }
 };
 
+const getAllTransactionsByAffiliate = async (req, res) => {
+  try {
+    const { affiliateId } = req.params;
+    const affiliate = await Affiliate.findById(affiliateId);
+    if (!affiliate) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Affiliate not found"));
+    }
+    const transactions = await Transaction.find({
+      affiliate: affiliateId,
+    }).populate("subscription");
+
+    if (!transactions) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Transactions not found"));
+    }
+    return res.status(HTTP_STATUS.OK).send(
+      success(
+        "Transactions retrieved successfully",
+        transactions.map((transaction) => ({
+          ...transaction.toObject(),
+          level: affiliate.level,
+        }))
+      )
+    );
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Transactions failed", err.message));
+  }
+};
+
 /**
  * @route POST /create-customer
  * @desc Creates a new Stripe customer
@@ -329,5 +376,6 @@ module.exports = {
   getAffiliateByCode,
   getPaymentIntent,
   getAllPaymentIntents,
+  getAllTransactionsByAffiliate,
   confirmPaymentbyPaymentIntent,
 };
