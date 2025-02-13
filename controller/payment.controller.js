@@ -294,6 +294,158 @@ const getAllTransactionsByAffiliate = async (req, res) => {
   }
 };
 
+const getAllTransactions = async (req, res) => {
+  const { filter } = req.query;
+  let transactions;
+  try {
+    if (filter === "monthly") {
+      transactions = await Transaction.aggregate([
+        {
+          $group: {
+            _id: { $month: "$createdAt" },
+            amount: { $sum: "$amount" },
+          },
+        },
+        {
+          $addFields: {
+            total: { $sum: "$amount" },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]);
+
+      const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      transactions = transactions.map((transaction) => ({
+        name: monthNames[transaction._id - 1],
+        amt: transaction.amount,
+      }));
+    } else if (filter === "yearly") {
+      transactions = await Transaction.aggregate([
+        {
+          $group: {
+            _id: { $year: "$createdAt" },
+            amount: { $sum: "$amount" },
+          },
+        },
+        {
+          $addFields: {
+            total: { $sum: "$amount" },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]);
+      transactions = transactions.map((transaction) => ({
+        name: transaction._id,
+        amt: transaction.amount,
+      }));
+    } else {
+      transactions = await Transaction.find().populate("subscription");
+      const total = transactions.reduce(
+        (total, transaction) => total + transaction.amount,
+        0
+      );
+      transactions = transactions.map((transaction) => {
+        const date = new Date(transaction.createdAt);
+        return {
+          name: date.toLocaleString("default", { month: "short" }),
+          amt: transaction.amount,
+        };
+      });
+    }
+    if (!transactions) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Transactions not found"));
+    }
+    return res.status(HTTP_STATUS.OK).send(
+      success("Transactions retrieved successfully", {
+        transactions,
+        total: transactions.reduce(
+          (total, transaction) => total + transaction.amt,
+          0
+        ),
+      })
+    );
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Transactions failed", err.message));
+  }
+};
+
+const getWeeklyTransactions = (transactions) => {
+  const weekly = {};
+  transactions.forEach((transaction) => {
+    const week = getWeek(transaction.createdAt);
+    if (!weekly[week]) {
+      weekly[week] = 0;
+    }
+    weekly[week] += transaction.amount;
+  });
+  return Object.keys(weekly).map((key) => ({
+    name: key,
+    amt: weekly[key],
+  }));
+};
+
+const getMonthlyTransactions = (transactions) => {
+  const monthly = {};
+  transactions.forEach((transaction) => {
+    const month = getMonth(transaction.createdAt);
+    if (!monthly[month]) {
+      monthly[month] = 0;
+    }
+    monthly[month] += transaction.amount;
+  });
+  return Object.keys(monthly).map((key) => ({
+    name: key,
+    amt: monthly[key],
+  }));
+};
+
+const getYearlyTransactions = (transactions) => {
+  const yearly = {};
+  transactions.forEach((transaction) => {
+    const year = getYear(transaction.createdAt);
+    if (!yearly[year]) {
+      yearly[year] = 0;
+    }
+    yearly[year] += transaction.amount;
+  });
+  return Object.keys(yearly).map((key) => ({
+    name: key,
+    amt: yearly[key],
+  }));
+};
+
+const getWeek = (date) => {
+  const onejan = new Date(date.getFullYear(), 0, 1);
+  return Math.ceil(((date - onejan) / 86400000 + onejan.getDay() + 1) / 7);
+};
+
+const getMonth = (date) => {
+  return date.toLocaleString("default", { month: "long" });
+};
+
+const getYear = (date) => {
+  return date.getFullYear();
+};
+
 /**
  * @route POST /create-customer
  * @desc Creates a new Stripe customer
@@ -376,6 +528,7 @@ module.exports = {
   getAffiliateByCode,
   getPaymentIntent,
   getAllPaymentIntents,
+  getAllTransactions,
   getAllTransactionsByAffiliate,
   confirmPaymentbyPaymentIntent,
 };

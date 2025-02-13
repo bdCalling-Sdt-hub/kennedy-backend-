@@ -7,6 +7,7 @@ const {
   getPaymentIntent,
   getAllPaymentIntents,
   getAllTransactionsByAffiliate,
+  getAllTransactions,
   confirmPaymentbyPaymentIntent,
 } = require("../controller/payment.controller");
 const {
@@ -27,6 +28,7 @@ routes.get(
   "/get-all-transactions-by-affiliate/:affiliateId",
   getAllTransactionsByAffiliate
 );
+routes.get("/get-all-transactions", getAllTransactions);
 routes.post("/create-customer", createCustomer);
 
 module.exports = routes;
