@@ -6,7 +6,7 @@ const Notification = require("../model/notification.model");
 
 const getAllUsers = async (req, res) => {
   try {
-    const { role, isAffiliate } = req.query;
+    const { role, isAffiliate, isActive } = req.query;
     const query = {};
 
     if (role) {
@@ -17,12 +17,18 @@ const getAllUsers = async (req, res) => {
       query.isAffiliate = isAffiliate === "true";
     }
 
+    if (typeof isActive !== "undefined") {
+      query.isActive = isActive === "true";
+    }
+
     const users = await UserModel.find(query).select("-__v");
+    const count = await UserModel.countDocuments(query);
 
     if (users.length) {
       return res.status(HTTP_STATUS.OK).send(
         success("Successfully received all users", {
           result: users,
+          count,
         })
       );
     } else {
