@@ -29,7 +29,7 @@ const configureFileUpload = () => {
       "categoryImage",
       "videoFile",
       "audioFile",
-      "pdfFiles", // ✅ Added PDF field
+      "pdfFiles",
     ];
 
     if (file.fieldname === undefined) {
