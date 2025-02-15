@@ -27,6 +27,11 @@ const CommentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Book",
     },
+
+    forum: {
+      type: Schema.Types.ObjectId,
+      ref: "Forum",
+    },
   },
   { timestamps: true }
 );

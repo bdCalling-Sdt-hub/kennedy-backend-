@@ -10,8 +10,12 @@ const transactionSchema = new Schema(
     },
     subscription: {
       type: Schema.Types.ObjectId,
-      ref: "SubscriptionPlan",
+      ref: "Subscription",
       required: true,
+    },
+    affiliate: {
+      type: Schema.Types.ObjectId,
+      ref: "Affiliate",
     },
     paymentId: {
       type: String,
@@ -25,6 +29,9 @@ const transactionSchema = new Schema(
       type: String,
       enum: ["paid", "failed", "pending"],
       required: true,
+    },
+    affiliateComission: {
+      type: Number,
     },
   },
   { timestamps: true }

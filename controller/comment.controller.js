@@ -304,9 +304,11 @@ const getAllPodcastCommentsByPodcastId = async (req, res) => {
     const { podcastId } = req.params;
     const podcastComments = await Comment.find({
       podcast: podcastId,
-    }).sort({
-      createdAt: -1,
-    });
+    })
+      .populate("user", "name image")
+      .sort({
+        createdAt: -1,
+      });
 
     if (podcastComments) {
       return res

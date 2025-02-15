@@ -3,7 +3,9 @@ const routes = express();
 const fileUpload = require("../middleware/fileUpload");
 const {
   addPost,
+  addCommentToForum,
   getAllPosts,
+  getAllCommentsOfAForum,
   getPostById,
   getPostByUserId,
   updatePostById,
@@ -13,8 +15,15 @@ const {
 const { isAuthorizedUser } = require("../middleware/authValidationJWT");
 
 routes.post("/add-post", isAuthorizedUser, fileUpload(), addPost);
+routes.post(
+  "/add-comment-to-forum/:postId",
+  isAuthorizedUser,
+  addCommentToForum
+);
 
 routes.get("/get-all-posts", getAllPosts);
+
+routes.get("/get-all-comments-of-a-forum/:forumId", getAllCommentsOfAForum);
 
 routes.get("/get-post-by-id/:id", getPostById);
 

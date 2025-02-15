@@ -42,7 +42,7 @@ const addReviewToBook = async (req, res) => {
     const { bookId, review } = req.body;
 
     const bookReview = await Review.findOne({
-      book: new mongoose.Types.ObjectId(bookId),
+      user: req.user._id,
     });
 
     if (bookReview) {

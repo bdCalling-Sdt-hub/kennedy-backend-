@@ -6,7 +6,7 @@ const Notification = require("../model/notification.model");
 
 const getAllUsers = async (req, res) => {
   try {
-    const { role, isAffiliate } = req.query;
+    const { role, isAffiliate, isActive } = req.query;
     const query = {};
 
     if (role) {
@@ -17,11 +17,40 @@ const getAllUsers = async (req, res) => {
       query.isAffiliate = isAffiliate === "true";
     }
 
+    if (typeof isActive !== "undefined") {
+      query.isActive = isActive === "true";
+    }
+
     const users = await UserModel.find(query).select("-__v");
+    const count = await UserModel.countDocuments(query);
 
     if (users.length) {
       return res.status(HTTP_STATUS.OK).send(
         success("Successfully received all users", {
+          result: users,
+          count,
+        })
+      );
+    } else {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("Users not found"));
+    }
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
+const getUsersAppliedForAffiliate = async (req, res) => {
+  try {
+    const users = await UserModel.find({
+      affiliateApplicationStatus: "pending",
+    }).select("-__v");
+
+    if (users.length) {
+      return res.status(HTTP_STATUS.OK).send(
+        success("users applied for affiliate", {
           result: users,
         })
       );
@@ -62,7 +91,9 @@ const profile = async (req, res) => {
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("User not logged in"));
     }
-    const user = await UserModel.findById(req.user._id).select("-password");
+    const user = await UserModel.findById(req.user._id)
+      .select("-password")
+      .populate("affiliate");
     if (!user) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
@@ -259,6 +290,7 @@ const getAllNotifications = async (req, res) => {
 module.exports = {
   getAllUsers,
   getOneUserById,
+  getUsersAppliedForAffiliate,
   getNotificationsByUserId,
   getAllNotifications,
   updateUserById,

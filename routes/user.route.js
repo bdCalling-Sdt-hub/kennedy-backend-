@@ -4,6 +4,7 @@ const fileUpload = require("../middleware/fileUpload");
 const {
   getAllUsers,
   getOneUserById,
+  getUsersAppliedForAffiliate,
   getNotificationsByUserId,
   getAllNotifications,
   updateUserById,
@@ -40,6 +41,12 @@ routes.patch(
 );
 
 routes.get("/profile", isAuthorizedUser, profile);
+
+routes.get(
+  "/users-applied-for-affiliate",
+
+  getUsersAppliedForAffiliate
+);
 
 routes.patch(
   "/update-profile-by-user",

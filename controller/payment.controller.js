@@ -2,7 +2,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const Transaction = require("../model/transaction.model");
 const User = require("../model/user.model");
-const Subscription = require("../model/subscriptionPlan.model");
+const SubscriptionPlan = require("../model/subscriptionPlan.model");
+const Subscription = require("../model/subscription.model");
 const Affiliate = require("../model/affiliate.model");
 const HTTP_STATUS = require("../constants/statusCodes");
 const { success, failure } = require("../utilities/common");
@@ -19,7 +20,9 @@ const createPaymentIntent = async (req, res) => {
     }
 
     // Fetch the Subscription details
-    const subscription = await Subscription.findOne({ name: subscriptionPlan });
+    const subscription = await SubscriptionPlan.findOne({
+      name: subscriptionPlan,
+    });
 
     if (!subscription) {
       return res
@@ -69,91 +72,110 @@ const createPaymentIntent = async (req, res) => {
 
 const confirmPaymentbyPaymentIntent = async (req, res) => {
   try {
-    const { paymentIntent, subscriptionPlan, affiliateCode } = req.body;
+    const { paymentIntentId, subscriptionPlan, affiliateCode, price } =
+      req.body;
 
-    if (affiliateCode) {
-      const affiliate = await Affiliate.findOne({ affiliateCode });
-
-      if (!affiliate) {
-        return res
-          .status(HTTP_STATUS.NOT_FOUND)
-          .send(failure("Affiliate not found"));
-      }
-
-      // Pay the affiliate 10% commission
-      if (affiliate && affiliate.stripeAccountId) {
-        const commission = price * 0.1; // 10% commission
-        await stripe.transfers.create({
-          amount: commission * 100,
-          currency: "usd",
-          destination: affiliate.stripeAccountId,
-        });
-
-        affiliate.totalEarnings += commission;
-        await affiliate.save();
-      }
+    if (!paymentIntentId || !subscriptionPlan) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Please provide paymentIntentId and subscriptionPlan"));
     }
 
-    if (!paymentIntent || !subscriptionPlan) {
+    if (!req.user || !req.user._id) {
+      return res.status(HTTP_STATUS.UNAUTHORIZED).send(failure("Please login"));
+    }
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    if (!paymentIntent) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("please provide paymentIntent and appointmentId"));
-    }
-
-    if (!req.user && !req.user._id) {
-      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("please login"));
+        .send(failure("Payment Intent not found"));
     }
 
     const user = await User.findById(req.user._id);
-
     if (!user) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
     }
 
+    const subscriptionPlanDetails = await SubscriptionPlan.findOne({
+      name: subscriptionPlan,
+    });
+    if (!subscriptionPlanDetails) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Subscription plan not found"));
+    }
+    let affiliate;
+    if (affiliateCode) {
+      affiliate = await Affiliate.findOne({ affiliateCode });
+      if (affiliate && affiliate.stripeAccountId) {
+        const commission = price * 0.1; // 10% commission
+        await stripe.transfers.create({
+          amount: commission * 100,
+          currency: paymentIntent.currency,
+          destination: affiliate.stripeAccountId,
+        });
+
+        affiliate.totalCommission += commission;
+        affiliate.totalReferrals += 1;
+        if (affiliate.totalCommission >= 240000) {
+          affiliate.level = 1;
+        }
+        if (affiliate.totalCommission >= 500000) {
+          affiliate.level = 2;
+        }
+        if (affiliate.totalCommission >= 1000000) {
+          affiliate.level = 3;
+        }
+        if (affiliate.totalCommission >= 2000000) {
+          affiliate.level = 4;
+        }
+        await affiliate.save();
+      }
+    }
+
     const subscription = await Subscription.create({
+      subscriptionPlan: subscriptionPlanDetails._id,
       name: subscriptionPlan,
       paymentId: paymentIntent.id,
       paymentStatus: "paid",
-      user: user._id,
+      buyer: user._id,
+      startDate: new Date(),
+      endDate: new Date(
+        new Date().getTime() +
+          subscriptionPlanDetails.duration * 24 * 60 * 60 * 1000
+      ),
     });
 
-    if (!subscription) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Subscription could not be created"));
-    }
-
-    // Create a new transaction
     const transaction = new Transaction({
-      user: req.user._id,
+      user: user._id,
       subscription: subscription._id,
       paymentId: paymentIntent.id,
       amount: paymentIntent.amount / 100,
       status: "paid",
     });
+
+    if (affiliateCode) {
+      const commission = price * 0.1; // 10% commission
+      transaction.affiliate = affiliate._id;
+      transaction.affiliateComission = commission;
+      subscription.affiliate = affiliate._id;
+      subscription.affiliateComission = commission;
+    }
     await transaction.save();
+    await subscription.save();
 
     user.subscriptions.push(subscription._id);
-    if (subscription.name === "basic") {
+    if (subscriptionPlan === "basic") {
       user.isBasicSubscribed = true;
-      subscription.startDate = new Date();
-      subscription.endDate = new Date(
-        new Date().getTime() + subscription.duration * 24 * 60 * 60 * 1000
-      );
-    }
-
-    if (subscription.name === "premium") {
+    } else if (subscriptionPlan === "premium") {
       user.isPremiumSubscribed = true;
-      subscription.startDate = new Date();
-      subscription.endDate = new Date(
-        new Date().getTime() + subscription.duration * 24 * 60 * 60 * 1000
-      );
     }
     await user.save();
 
     const userName = user.name || "user";
     const emailData = {
-      email: userName.email,
+      email: user.email,
       subject: "Payment processed successfully",
       html: `
               <h2 style="color: #007BFF; text-align: center;">Subscription Confirmed</h2>
@@ -174,6 +196,26 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .send(failure("Payment failed", err.message));
+  }
+};
+
+const getAffiliateByCode = async (req, res) => {
+  try {
+    const { affiliateCode } = req.params;
+    const affiliate = await Affiliate.findOne({ affiliateCode });
+    if (!affiliate) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Affiliate not found"));
+    }
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Affiliate retrieved successfully", affiliate));
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Affiliate failed", err.message));
   }
 };
 
@@ -215,6 +257,193 @@ const getAllPaymentIntents = async (req, res) => {
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .send(failure("Payment intents failed", err.message));
   }
+};
+
+const getAllTransactionsByAffiliate = async (req, res) => {
+  try {
+    const { affiliateId } = req.params;
+    const affiliate = await Affiliate.findById(affiliateId);
+    if (!affiliate) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Affiliate not found"));
+    }
+    const transactions = await Transaction.find({
+      affiliate: affiliateId,
+    }).populate("subscription");
+
+    if (!transactions) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Transactions not found"));
+    }
+    return res.status(HTTP_STATUS.OK).send(
+      success(
+        "Transactions retrieved successfully",
+        transactions.map((transaction) => ({
+          ...transaction.toObject(),
+          level: affiliate.level,
+        }))
+      )
+    );
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Transactions failed", err.message));
+  }
+};
+
+const getAllTransactions = async (req, res) => {
+  const { filter } = req.query;
+  let transactions;
+  try {
+    if (filter === "monthly") {
+      transactions = await Transaction.aggregate([
+        {
+          $group: {
+            _id: { $month: "$createdAt" },
+            amount: { $sum: "$amount" },
+          },
+        },
+        {
+          $addFields: {
+            total: { $sum: "$amount" },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]);
+
+      const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      transactions = transactions.map((transaction) => ({
+        name: monthNames[transaction._id - 1],
+        amt: transaction.amount,
+      }));
+    } else if (filter === "yearly") {
+      transactions = await Transaction.aggregate([
+        {
+          $group: {
+            _id: { $year: "$createdAt" },
+            amount: { $sum: "$amount" },
+          },
+        },
+        {
+          $addFields: {
+            total: { $sum: "$amount" },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]);
+      transactions = transactions.map((transaction) => ({
+        name: transaction._id,
+        amt: transaction.amount,
+      }));
+    } else {
+      transactions = await Transaction.find().populate("subscription");
+      const total = transactions.reduce(
+        (total, transaction) => total + transaction.amount,
+        0
+      );
+      transactions = transactions.map((transaction) => {
+        const date = new Date(transaction.createdAt);
+        return {
+          name: date.toLocaleString("default", { month: "short" }),
+          amt: transaction.amount,
+        };
+      });
+    }
+    if (!transactions) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Transactions not found"));
+    }
+    return res.status(HTTP_STATUS.OK).send(
+      success("Transactions retrieved successfully", {
+        transactions,
+        total: transactions.reduce(
+          (total, transaction) => total + transaction.amt,
+          0
+        ),
+      })
+    );
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Transactions failed", err.message));
+  }
+};
+
+const getWeeklyTransactions = (transactions) => {
+  const weekly = {};
+  transactions.forEach((transaction) => {
+    const week = getWeek(transaction.createdAt);
+    if (!weekly[week]) {
+      weekly[week] = 0;
+    }
+    weekly[week] += transaction.amount;
+  });
+  return Object.keys(weekly).map((key) => ({
+    name: key,
+    amt: weekly[key],
+  }));
+};
+
+const getMonthlyTransactions = (transactions) => {
+  const monthly = {};
+  transactions.forEach((transaction) => {
+    const month = getMonth(transaction.createdAt);
+    if (!monthly[month]) {
+      monthly[month] = 0;
+    }
+    monthly[month] += transaction.amount;
+  });
+  return Object.keys(monthly).map((key) => ({
+    name: key,
+    amt: monthly[key],
+  }));
+};
+
+const getYearlyTransactions = (transactions) => {
+  const yearly = {};
+  transactions.forEach((transaction) => {
+    const year = getYear(transaction.createdAt);
+    if (!yearly[year]) {
+      yearly[year] = 0;
+    }
+    yearly[year] += transaction.amount;
+  });
+  return Object.keys(yearly).map((key) => ({
+    name: key,
+    amt: yearly[key],
+  }));
+};
+
+const getWeek = (date) => {
+  const onejan = new Date(date.getFullYear(), 0, 1);
+  return Math.ceil(((date - onejan) / 86400000 + onejan.getDay() + 1) / 7);
+};
+
+const getMonth = (date) => {
+  return date.toLocaleString("default", { month: "long" });
+};
+
+const getYear = (date) => {
+  return date.getFullYear();
 };
 
 /**
@@ -296,7 +525,10 @@ module.exports = {
   createPaymentIntent,
   createCustomer,
   createSubscription,
+  getAffiliateByCode,
   getPaymentIntent,
   getAllPaymentIntents,
+  getAllTransactions,
+  getAllTransactionsByAffiliate,
   confirmPaymentbyPaymentIntent,
 };
