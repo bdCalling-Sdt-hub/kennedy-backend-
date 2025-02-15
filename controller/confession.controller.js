@@ -230,60 +230,6 @@ const deleteConfessionById = async (req, res) => {
   }
 };
 
-const disableServiceById = async (req, res) => {
-  try {
-    if (!req.params.id) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Please provide service id"));
-    }
-    const service = await Confession.findByIdAndUpdate(
-      req.params.id,
-      { isDisabled: true },
-      { new: true }
-    );
-    if (!service) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Service not found"));
-    }
-    return res
-      .status(HTTP_STATUS.OK)
-      .send(success("Successfully disabled service", service));
-  } catch (error) {
-    return res
-      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .send(failure("Error disabling service", error.message));
-  }
-};
-
-const enableServiceById = async (req, res) => {
-  try {
-    if (!req.params.id) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Please provide service id"));
-    }
-    const service = await Confession.findByIdAndUpdate(
-      req.params.id,
-      { isDisabled: false },
-      { new: true }
-    );
-    if (!service) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Service not found"));
-    }
-    return res
-      .status(HTTP_STATUS.OK)
-      .send(success("Successfully enabled service", service));
-  } catch (error) {
-    return res
-      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .send(failure("Error enabling service", error.message));
-  }
-};
-
 module.exports = {
   addConfession,
   getAllConfessions,
