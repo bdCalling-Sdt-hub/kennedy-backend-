@@ -210,23 +210,34 @@ const deleteConfessionById = async (req, res) => {
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("Please provide service id"));
     }
-    const podcast = await Confession.findByIdAndUpdate(
-      req.params.id,
-      { isDeleted: true },
-      { new: true }
-    );
-    if (!podcast) {
+    const confession = await Confession.findByIdAndRemove(req.params.id);
+    if (!confession) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("podcast not found"));
+        .send(failure("confession not found"));
     }
+
+    const rootPath = process.cwd();
+    if (
+      confession.confessionVideoUrl &&
+      fs.existsSync(`${rootPath}/${confession.confessionVideoUrl}`)
+    ) {
+      await fs.promises.unlink(`${rootPath}/${confession.confessionVideoUrl}`);
+    }
+    if (
+      confession.confessionAudioUrl &&
+      fs.existsSync(`${rootPath}/${confession.confessionAudioUrl}`)
+    ) {
+      await fs.promises.unlink(`${rootPath}/${confession.confessionAudioUrl}`);
+    }
+
     return res
       .status(HTTP_STATUS.OK)
-      .send(success("Successfully deleted podcast", podcast));
+      .send(success("Successfully deleted confession", confession));
   } catch (error) {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .send(failure("Error deleting podcast", error.message));
+      .send(failure("Error deleting confession", error.message));
   }
 };
 
