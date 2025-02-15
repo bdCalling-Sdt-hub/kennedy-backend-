@@ -94,6 +94,10 @@ const userSchema = new mongoose.Schema(
 
     bookReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
 
+    confessionsUploaded: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Confession" },
+    ],
+
     confessionComments: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
     ],

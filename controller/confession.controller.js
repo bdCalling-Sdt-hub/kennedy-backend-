@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { success, failure } = require("../utilities/common");
 const HTTP_STATUS = require("../constants/statusCodes");
 const Confession = require("../model/confession.model");
@@ -6,15 +7,21 @@ const Nootification = require("../model/notification.model");
 
 const addConfession = async (req, res) => {
   try {
-    if (!req.user) {
+    if (!req.user || !req.user._id) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("User not logged in"));
     }
 
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
+    }
+
     const { title, authorName, description } = req.body;
 
     const newConfession = new Confession({
+      user: req.user._id,
       title,
       authorName,
       description,
@@ -23,8 +30,11 @@ const addConfession = async (req, res) => {
     if (!newConfession) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
-        .send(failure("podcast could not be added"));
+        .send(failure("confession could not be added"));
     }
+
+    user.confessionsUploaded.push(newConfession._id);
+    await user.save();
 
     console.log("req.files", req.files);
     console.log("req.filesaudioFile", req.files["audioFile"]);
@@ -38,15 +48,22 @@ const addConfession = async (req, res) => {
         newConfession.confessionAudioUrl = audioFileName;
       }
     }
+    if (req.files && req.files["videoFile"]) {
+      let videoFileName = "";
+      if (req.files.videoFile[0]) {
+        videoFileName = `public/uploads/videos/${req.files.videoFile[0].filename}`;
+        newConfession.confessionVideoUrl = videoFileName;
+      }
+    }
     await newConfession.save();
     return res
       .status(HTTP_STATUS.CREATED)
-      .send(success("podcast added successfully", newConfession));
+      .send(success("confession added successfully", newConfession));
   } catch (err) {
     console;
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .send(failure("error adding podcast", err.message));
+      .send(failure("error adding confession", err.message));
   }
 };
 
@@ -55,44 +72,68 @@ const updateConfessionById = async (req, res) => {
     if (!req.params.id) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Please provide podcast id"));
+        .send(failure("Please provide confession id"));
     }
-    const podcast = await Confession.findById(req.params.id);
-    if (!podcast) {
+    const confession = await Confession.findById(req.params.id);
+    if (!confession) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("podcast not found"));
+        .send(failure("confession not found"));
     }
-    console.log("files", req.files);
-    console.log("files", req.files["videoFile"]);
 
-    if (req.files && req.files["videoFile"]) {
-      let imageFileName = "";
-      if (req.files.videoFile[0]) {
-        // Add public/uploads link to the image file
-
-        imageFileName = `public/uploads/videos/${req.files.videoFile[0].filename}`;
-        podcast.podcastVideo = imageFileName;
+    if (req.files && req.files["audioFile"]) {
+      let audioFileName = "";
+      if (req.files.audioFile[0]) {
+        const audioFilePath = `public/uploads/audios/${req.files.audioFile[0].filename}`;
+        if (confession.confessionAudioUrl) {
+          const filePath = confession.confessionAudioUrl.split("/").pop();
+          const oldFilePath = `public/uploads/audios/${filePath}`;
+          try {
+            await fs.promises.unlink(oldFilePath);
+          } catch (error) {
+            console.log("error deleting old file", error);
+          }
+        }
+        audioFileName = audioFilePath;
+        confession.confessionAudioUrl = audioFilePath;
       }
     }
 
-    await podcast.save();
+    if (req.files && req.files["videoFile"]) {
+      let videoFileName = "";
+      if (req.files.videoFile[0]) {
+        const videoFilePath = `public/uploads/videos/${req.files.videoFile[0].filename}`;
+        if (confession.confessionVideoUrl) {
+          const filePath = confession.confessionVideoUrl.split("/").pop();
+          const oldFilePath = `public/uploads/videos/${filePath}`;
+          try {
+            await fs.promises.unlink(oldFilePath);
+          } catch (error) {
+            console.log("error deleting old file", error);
+          }
+        }
+        videoFileName = videoFilePath;
+        confession.confessionVideoUrl = videoFilePath;
+      }
+    }
 
-    const updatedPodcast = await Confession.findByIdAndUpdate(
+    await confession.save();
+
+    const updatedConfession = await Confession.findByIdAndUpdate(
       req.params.id,
       req.body,
       {
         new: true,
       }
     );
-    if (!updatedPodcast) {
+    if (!updatedConfession) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("podcast not found"));
+        .send(failure("confession not found"));
     }
     return res
       .status(HTTP_STATUS.OK)
-      .send(success("Successfully updated podcast", updatedPodcast));
+      .send(success("Successfully updated confession", updatedConfession));
   } catch (error) {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
