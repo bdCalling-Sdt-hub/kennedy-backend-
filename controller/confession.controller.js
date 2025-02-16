@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { success, failure, generateRandomCode } = require("../utilities/common");
+const { success, failure } = require("../utilities/common");
 const HTTP_STATUS = require("../constants/statusCodes");
 const Confession = require("../model/confession.model");
 const User = require("../model/user.model");
