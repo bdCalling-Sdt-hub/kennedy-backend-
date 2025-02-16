@@ -93,7 +93,7 @@ const userSchema = new mongoose.Schema(
     },
 
     bookReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
-
+    forums: [{ type: mongoose.Schema.Types.ObjectId, ref: "Forum" }],
     confessionsUploaded: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Confession" },
     ],
