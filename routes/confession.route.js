@@ -7,6 +7,8 @@ const {
   getConfessionById,
   updateConfessionById,
   deleteConfessionById,
+  approveConfession,
+  cancelConfession,
 } = require("../controller/confession.controller");
 
 const {
@@ -32,5 +34,9 @@ routes.delete(
   isAuthorizedUser,
   deleteConfessionById
 );
+
+routes.post("/approve-confession/:id", isAuthorizedAdmin, approveConfession);
+
+routes.post("/cancel-confession/:id", isAuthorizedAdmin, cancelConfession);
 
 module.exports = routes;

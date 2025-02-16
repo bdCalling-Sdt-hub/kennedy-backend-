@@ -1,9 +1,10 @@
 const fs = require("fs");
-const { success, failure } = require("../utilities/common");
+const { success, failure, generateRandomCode } = require("../utilities/common");
 const HTTP_STATUS = require("../constants/statusCodes");
 const Confession = require("../model/confession.model");
 const User = require("../model/user.model");
 const Nootification = require("../model/notification.model");
+const { emailWithNodemailerGmail } = require("../config/email.config");
 
 const addConfession = async (req, res) => {
   try {
@@ -241,10 +242,130 @@ const deleteConfessionById = async (req, res) => {
   }
 };
 
+const approveConfession = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Please provide confession id"));
+    }
+    const confession = await Confession.findById(req.params.id);
+    if (!confession) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("confession not found"));
+    }
+
+    confession.status = "approved";
+    await confession.save();
+
+    const user = await User.findById(confession.user);
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
+    }
+
+    const notification = new Nootification({
+      uploader: user._id,
+      admin: req.user._id,
+      confession: confession._id,
+      status: "approved",
+      message: `Your confession "${confession.title}" has been approved`,
+      type: "confession",
+    });
+    await notification.save();
+
+    const emailData = {
+      email: user.email,
+      subject: "Confession approved",
+      html: `
+        <div style="max-width: 500px; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); text-align: center; font-family: Arial, sans-serif;">
+          <h6 style="font-size: 16px; color: #333;">Hello, ${
+            user.name || "User"
+          }</h6>
+          <p style="font-size: 14px; color: #555;">Your confession "${
+            confession.title
+          }" has been approved.</p>
+          <p style="font-size: 14px; color: #555;">Thank you for sharing your confession.</p>
+        </div>
+      `,
+    };
+    await emailWithNodemailerGmail(emailData);
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Successfully approved confession", confession));
+  } catch (error) {
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Error approving confession", error.message));
+  }
+};
+
+const cancelConfession = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Please provide confession id"));
+    }
+    const confession = await Confession.findById(req.params.id);
+    if (!confession) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("confession not found"));
+    }
+
+    confession.status = "cancelled";
+    await confession.save();
+
+    const user = await User.findById(confession.user);
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
+    }
+
+    const notification = new Nootification({
+      uploader: user._id,
+      admin: req.user._id,
+      confession: confession._id,
+      status: "cancelled",
+      message: `Your confession "${confession.title}" has been cancelled`,
+      type: "confession",
+    });
+    await notification.save();
+
+    const emailData = {
+      email: user.email,
+      subject: "Confession cancelled",
+      html: `
+        <div style="max-width: 500px; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); text-align: center; font-family: Arial, sans-serif;">
+          <h6 style="font-size: 16px; color: #333;">Hello, ${
+            user.name || "User"
+          }</h6>
+          <p style="font-size: 14px; color: #555;">Your confession "${
+            confession.title
+          }" has been cancelled.</p>
+          <p style="font-size: 14px; color: #555;">Thank you for sharing your confession.</p>
+        </div>
+      `,
+    };
+    await emailWithNodemailerGmail(emailData);
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Successfully rejected confession", confession));
+  } catch (error) {
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Error rejecting confession", error.message));
+  }
+};
+
 module.exports = {
   addConfession,
   getAllConfessions,
   getConfessionById,
   updateConfessionById,
   deleteConfessionById,
+  approveConfession,
+  cancelConfession,
 };
