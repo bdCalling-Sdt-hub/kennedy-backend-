@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
     },
 
     subscriptions: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "SubscriptionPlan" },
+      { type: mongoose.Schema.Types.ObjectId, ref: "Subscription" },
     ],
 
     isBasicSubscribed: {

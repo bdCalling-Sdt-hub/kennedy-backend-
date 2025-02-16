@@ -4,11 +4,15 @@ const {
   createSubscription,
   getAllSubscriptionPlans,
   getSubscriptionById,
+  getSubscriptionTimeLeftOfAUser,
   updateSubscriptionById,
   deleteSubscriptionById,
 } = require("../controller/subscription.controller");
 
-const { isAuthorizedAdmin } = require("../middleware/authValidationJWT");
+const {
+  isAuthorizedAdmin,
+  isAuthorizedUser,
+} = require("../middleware/authValidationJWT");
 
 routes.post(
   "/create-subscription",
@@ -18,7 +22,11 @@ routes.post(
 
 routes.get("/get-all-subscriptions", getAllSubscriptionPlans);
 
-routes.get("/get-subscription-by-id/:id", getSubscriptionById);
+routes.get(
+  "/get-subscription-time-left-of-a-user",
+  isAuthorizedUser,
+  getSubscriptionTimeLeftOfAUser
+);
 
 routes.put(
   "/update-subscription-by-id/:id",
