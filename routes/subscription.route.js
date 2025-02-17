@@ -5,6 +5,7 @@ const {
   getAllSubscriptionPlans,
   getSubscriptionById,
   getSubscriptionTimeLeftOfAUser,
+  getSubscriptionTimeLeftOfAllUsers,
   updateSubscriptionById,
   deleteSubscriptionById,
 } = require("../controller/subscription.controller");
@@ -26,6 +27,12 @@ routes.get(
   "/get-subscription-time-left-of-a-user",
   isAuthorizedUser,
   getSubscriptionTimeLeftOfAUser
+);
+
+routes.get(
+  "/get-subscription-time-left-of-all-users",
+  isAuthorizedAdmin,
+  getSubscriptionTimeLeftOfAllUsers
 );
 
 routes.put(

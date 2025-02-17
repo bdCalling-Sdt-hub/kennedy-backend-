@@ -187,11 +187,81 @@ const getSubscriptionTimeLeftOfAUser = async (req, res) => {
   }
 };
 
+const getSubscriptionTimeLeftOfAllUsers = async (req, res) => {
+  try {
+    // Fetch all users
+    const users = await UserModel.find();
+
+    if (!users) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Users do not exist"));
+    }
+
+    // Fetch the latest subscription of each user
+    const subscriptions = await Promise.all(
+      users.map(async (user) => {
+        if (!user.subscriptions || !user.subscriptions.length) {
+          return null;
+        }
+
+        const latestSubscriptionId =
+          user.subscriptions[user.subscriptions.length - 1];
+        const latestSubscription = await Subscription.findById(
+          new mongoose.Types.ObjectId(latestSubscriptionId)
+        );
+
+        if (!latestSubscription) {
+          return null;
+        }
+
+        const subscriptionTimeLeft = latestSubscription.endDate - Date.now();
+
+        const daysLeft = Math.ceil(
+          subscriptionTimeLeft / (1000 * 60 * 60 * 24)
+        );
+        const hoursLeft = Math.ceil(subscriptionTimeLeft / (1000 * 60 * 60));
+        const monthsLeft = Math.ceil(daysLeft / 30);
+        const yearsLeft = monthsLeft / 12;
+
+        return {
+          userId: user._id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          subscriptionTimeLeft,
+          daysLeft,
+          hoursLeft,
+          monthsLeft,
+          yearsLeft,
+        };
+      })
+    );
+
+    // Remove null values from the array
+    const filteredSubscriptions = subscriptions.filter(
+      (subscription) => subscription !== null
+    );
+
+    // Return the time left for each user to subscribe
+    res.status(HTTP_STATUS.OK).send({
+      message: "Time left for each user to subscribe",
+      subscriptions: filteredSubscriptions,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createSubscription,
   getAllSubscriptionPlans,
   getSubscriptionById,
   getSubscriptionTimeLeftOfAUser,
+  getSubscriptionTimeLeftOfAllUsers,
   updateSubscriptionById,
   deleteSubscriptionById,
 };
