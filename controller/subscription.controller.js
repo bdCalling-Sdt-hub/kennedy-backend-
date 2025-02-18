@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { success, failure } = require("../utilities/common");
 const HTTP_STATUS = require("../constants/statusCodes");
 const Subscription = require("../model/subscription.model");
+const SubscriptionPlan = require("../model/subscriptionPlan.model");
 const UserModel = require("../model/user.model");
 
 const createSubscription = async (req, res) => {
@@ -63,6 +64,30 @@ const updateSubscriptionById = async (req, res) => {
 };
 
 const getAllSubscriptionPlans = async (req, res) => {
+  try {
+    const subscriptionPlans = await SubscriptionPlan.find();
+
+    const count = await SubscriptionPlan.countDocuments();
+
+    if (!subscriptionPlans) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("subscriptionPlans not found"));
+    }
+    return res.status(HTTP_STATUS.OK).send(
+      success("Successfully received all subscriptionPlans", {
+        result: subscriptionPlans,
+        count,
+      })
+    );
+  } catch (error) {
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Error fetching subscriptions", error.message));
+  }
+};
+
+const getAllSubscriptions = async (req, res) => {
   try {
     const subscriptions = await Subscription.find();
 
@@ -259,6 +284,7 @@ const getSubscriptionTimeLeftOfAllUsers = async (req, res) => {
 module.exports = {
   createSubscription,
   getAllSubscriptionPlans,
+  getAllSubscriptions,
   getSubscriptionById,
   getSubscriptionTimeLeftOfAUser,
   getSubscriptionTimeLeftOfAllUsers,

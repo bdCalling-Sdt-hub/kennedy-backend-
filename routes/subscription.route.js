@@ -3,6 +3,7 @@ const routes = express();
 const {
   createSubscription,
   getAllSubscriptionPlans,
+  getAllSubscriptions,
   getSubscriptionById,
   getSubscriptionTimeLeftOfAUser,
   getSubscriptionTimeLeftOfAllUsers,
@@ -21,7 +22,11 @@ routes.post(
   createSubscription
 );
 
-routes.get("/get-all-subscriptions", getAllSubscriptionPlans);
+routes.get("/get-all-subscription-plans", getAllSubscriptionPlans);
+
+routes.get("/get-all-subscriptions", getAllSubscriptions);
+
+routes.get("/get-subscription-by-id/:id", getSubscriptionById);
 
 routes.get(
   "/get-subscription-time-left-of-a-user",
