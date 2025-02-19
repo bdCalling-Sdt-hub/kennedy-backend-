@@ -16,11 +16,7 @@ const {
   isAuthorizedUser,
 } = require("../middleware/authValidationJWT");
 
-routes.post(
-  "/create-subscription",
-  // isAuthorizedAdmin,
-  createSubscription
-);
+routes.post("/create-subscription", isAuthorizedAdmin, createSubscription);
 
 routes.get("/get-all-subscription-plans", getAllSubscriptionPlans);
 
