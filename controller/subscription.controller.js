@@ -41,21 +41,23 @@ const updateSubscriptionById = async (req, res) => {
         .send(failure("Please provide subscription id"));
     }
 
-    const updatedSubscription = await Subscription.findByIdAndUpdate(
+    const updatedSubscriptionPlan = await SubscriptionPlan.findByIdAndUpdate(
       req.params.id,
       req.body,
       {
         new: true,
       }
     );
-    if (!updatedSubscription) {
+    if (!updatedSubscriptionPlan) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("subscription not found"));
     }
     return res
       .status(HTTP_STATUS.OK)
-      .send(success("Successfully updated subscription", updatedSubscription));
+      .send(
+        success("Successfully updated subscription", updatedSubscriptionPlan)
+      );
   } catch (error) {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
