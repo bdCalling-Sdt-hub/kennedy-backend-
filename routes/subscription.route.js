@@ -5,6 +5,7 @@ const {
   getAllSubscriptionPlans,
   getAllSubscriptions,
   getSubscriptionById,
+  getSubscriptionByUserId,
   getSubscriptionTimeLeftOfAUser,
   getSubscriptionTimeLeftOfAllUsers,
   updateSubscriptionById,
@@ -23,6 +24,12 @@ routes.get("/get-all-subscription-plans", getAllSubscriptionPlans);
 routes.get("/get-all-subscriptions", getAllSubscriptions);
 
 routes.get("/get-subscription-by-id/:id", getSubscriptionById);
+
+routes.get(
+  "/get-subscription-by-user-id",
+  isAuthorizedUser,
+  getSubscriptionByUserId
+);
 
 routes.get(
   "/get-subscription-time-left-of-a-user",

@@ -136,6 +136,30 @@ const getSubscriptionById = async (req, res) => {
   }
 };
 
+const getSubscriptionByUserId = async (req, res) => {
+  try {
+    if (!req.user || !req.user._id) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("please login"));
+    }
+
+    const subscriptions = await Subscription.find({
+      buyer: req.user._id,
+    });
+    if (!subscriptions) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("subscriptions not found"));
+    }
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Successfully received subscriptions", subscriptions));
+  } catch (error) {
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Error fetching subscriptions", error.message));
+  }
+};
+
 const deleteSubscriptionPlanById = async (req, res) => {
   try {
     if (!req.params.id) {
@@ -291,6 +315,7 @@ module.exports = {
   getAllSubscriptionPlans,
   getAllSubscriptions,
   getSubscriptionById,
+  getSubscriptionByUserId,
   getSubscriptionTimeLeftOfAUser,
   getSubscriptionTimeLeftOfAllUsers,
   updateSubscriptionById,
