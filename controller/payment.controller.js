@@ -2,6 +2,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const Transaction = require("../model/transaction.model");
 const User = require("../model/user.model");
+const Book = require("../model/book.model");
 const SubscriptionPlan = require("../model/subscriptionPlan.model");
 const Subscription = require("../model/subscription.model");
 const Affiliate = require("../model/affiliate.model");
@@ -11,24 +12,7 @@ const { emailWithNodemailerGmail } = require("../config/email.config");
 
 const createPaymentIntent = async (req, res) => {
   try {
-    const { subscriptionPlan, paymentMethodId, amount } = req.body;
-
-    if (!subscriptionPlan || !paymentMethodId || !amount) {
-      return res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .send(failure("please provide all the fields"));
-    }
-
-    // Fetch the Subscription details
-    const subscription = await SubscriptionPlan.findOne({
-      name: subscriptionPlan,
-    });
-
-    if (!subscription) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("subscription not found"));
-    }
+    const { subscriptionPlan, bookId, paymentMethodId, amount } = req.body;
 
     if (!req.user || !req.user._id) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("please login"));
@@ -38,6 +22,36 @@ const createPaymentIntent = async (req, res) => {
 
     if (!user) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
+    }
+
+    if (!paymentMethodId || !amount) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("please provide all the fields"));
+    }
+
+    if (subscriptionPlan) {
+      // Fetch the Subscription details
+      const subscription = await SubscriptionPlan.findOne({
+        name: subscriptionPlan,
+      });
+
+      if (!subscription) {
+        return res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .send(failure("subscription not found"));
+      }
+    }
+
+    if (bookId) {
+      // Fetch the book details
+      const book = await Book.findById(bookId);
+
+      if (!book) {
+        return res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .send(failure("book not found"));
+      }
     }
 
     // Create a payment intent
