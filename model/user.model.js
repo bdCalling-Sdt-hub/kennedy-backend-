@@ -33,6 +33,8 @@ const userSchema = new mongoose.Schema(
       { type: mongoose.Schema.Types.ObjectId, ref: "Subscription" },
     ],
 
+    booksBought: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
+
     isBasicSubscribed: {
       type: Boolean,
       default: false,
