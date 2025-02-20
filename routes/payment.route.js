@@ -5,6 +5,7 @@ const {
   createCustomer,
   getAffiliateByCode,
   getPaymentIntent,
+  getTransactionByUserId,
   getAllPaymentIntents,
   getAllTransactionsByAffiliate,
   getAllTransactions,
@@ -27,6 +28,12 @@ routes.get("/get-affiliate-by-code/:affiliateCode", getAffiliateByCode);
 routes.get(
   "/get-all-transactions-by-affiliate/:affiliateId",
   getAllTransactionsByAffiliate
+);
+
+routes.get(
+  "/get-transaction-by-user-id",
+  isAuthorizedUser,
+  getTransactionByUserId
 );
 routes.get("/get-all-transactions", getAllTransactions);
 routes.post("/create-customer", createCustomer);

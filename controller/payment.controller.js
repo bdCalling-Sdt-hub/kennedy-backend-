@@ -467,6 +467,30 @@ const getAllTransactions = async (req, res) => {
   }
 };
 
+const getTransactionByUserId = async (req, res) => {
+  try {
+    if (!req.user || !req.user._id) {
+      return res.status(HTTP_STATUS.UNAUTHORIZED).send(failure("Please login"));
+    }
+    const transactions = await Transaction.find({
+      user: req.user._id,
+    }).populate("subscription");
+    if (!transactions) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Transactions not found"));
+    }
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Transactions retrieved successfully", transactions));
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Transactions failed", err.message));
+  }
+};
+
 const getWeeklyTransactions = (transactions) => {
   const weekly = {};
   transactions.forEach((transaction) => {
@@ -606,6 +630,7 @@ module.exports = {
   createSubscription,
   getAffiliateByCode,
   getPaymentIntent,
+  getTransactionByUserId,
   getAllPaymentIntents,
   getAllTransactions,
   getAllTransactionsByAffiliate,
