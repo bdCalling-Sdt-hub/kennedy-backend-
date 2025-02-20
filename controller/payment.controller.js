@@ -157,6 +157,7 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
         } else if (subscriptionPlan === "premium") {
           user.isPremiumSubscribed = true;
         }
+        user.booksBought.push(book._id);
       } else {
         // If user has already bought a book before, just buy the book
         user.booksBought.push(book._id);
