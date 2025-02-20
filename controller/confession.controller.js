@@ -146,6 +146,7 @@ const getAllConfessions = async (req, res) => {
   try {
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
+    const status = req.query.status;
 
     if (page < 1) page = 1;
     if (limit < 1) limit = 10;
@@ -153,21 +154,24 @@ const getAllConfessions = async (req, res) => {
     const skip = (page - 1) * limit;
 
     let query = { isDeleted: false };
+    if (status) {
+      query.status = status;
+    }
 
-    const podcasts = await Confession.find(query)
+    const confessions = await Confession.find(query)
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
     const count = await Confession.countDocuments(query);
 
-    if (!podcasts) {
+    if (!confessions) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("podcasts not found"));
+        .send(failure("confessions not found"));
     }
     return res.status(HTTP_STATUS.OK).send(
-      success("Successfully received all podcasts", {
-        result: podcasts,
+      success("Successfully received all confessions", {
+        result: confessions,
         count,
         page,
         limit,
@@ -177,7 +181,7 @@ const getAllConfessions = async (req, res) => {
   } catch (error) {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .send(failure("Error fetching podcasts", error.message));
+      .send(failure("Error fetching confessions", error.message));
   }
 };
 
