@@ -6,7 +6,6 @@ const {
   getAllConfessionComments,
   getAllConfessionCommentsByConfessionId,
   deleteConfessionComment,
-
   addCommentToPodcast,
   getAllPodcastComments,
   getAllPodcastCommentsByPodcastId,

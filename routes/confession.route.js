@@ -5,6 +5,7 @@ const {
   addConfession,
   getAllConfessions,
   getConfessionById,
+  getConfessionByUser,
   updateConfessionById,
   deleteConfessionById,
   approveConfession,
@@ -21,7 +22,7 @@ routes.post("/add-confession", isAuthorizedUser, fileUpload(), addConfession);
 routes.get("/get-all-confessions", getAllConfessions);
 
 routes.get("/get-confession-by-id/:id", getConfessionById);
-
+routes.get("/get-confession-by-user", isAuthorizedUser, getConfessionByUser);
 routes.put(
   "/update-confession-by-id/:id",
   isAuthorizedUser,

@@ -204,6 +204,31 @@ const getConfessionById = async (req, res) => {
   }
 };
 
+const getConfessionByUser = async (req, res) => {
+  try {
+    if (!req.user || !req.user._id) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("please log in"));
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("user not found"));
+    }
+    const confessions = await Confession.find({ user: req.user._id });
+    if (!confessions) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("confessions not found"));
+    }
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Successfully received confessions", confessions));
+  } catch (error) {
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Error fetching confessions", error.message));
+  }
+};
+
 const deleteConfessionById = async (req, res) => {
   try {
     if (!req.params.id) {
@@ -364,6 +389,7 @@ module.exports = {
   addConfession,
   getAllConfessions,
   getConfessionById,
+  getConfessionByUser,
   updateConfessionById,
   deleteConfessionById,
   approveConfession,
