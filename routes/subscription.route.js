@@ -8,7 +8,7 @@ const {
   getSubscriptionTimeLeftOfAUser,
   getSubscriptionTimeLeftOfAllUsers,
   updateSubscriptionById,
-  deleteSubscriptionById,
+  deleteSubscriptionPlanById,
 } = require("../controller/subscription.controller");
 
 const {
@@ -43,9 +43,9 @@ routes.put(
 );
 
 routes.delete(
-  "/delete-subscription-by-id/:id",
+  "/delete-subscription-plan-by-id/:id",
   //   isAuthorizedAdmin,
-  deleteSubscriptionById
+  deleteSubscriptionPlanById
 );
 
 module.exports = routes;

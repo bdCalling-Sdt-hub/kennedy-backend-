@@ -9,23 +9,23 @@ const createSubscription = async (req, res) => {
   try {
     const { name, price, duration, features } = req.body;
 
-    const newSubscription = new Subscription({
+    const newSubscriptionPlan = new SubscriptionPlan({
       name,
       price,
       duration,
       features,
     });
 
-    if (!newSubscription) {
+    if (!newSubscriptionPlan) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
         .send(failure("subscription could not be added"));
     }
 
-    await newSubscription.save();
+    await newSubscriptionPlan.save();
     return res
       .status(HTTP_STATUS.CREATED)
-      .send(success("subscription added successfully", newSubscription));
+      .send(success("subscription added successfully", newSubscriptionPlan));
   } catch (err) {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
@@ -134,15 +134,17 @@ const getSubscriptionById = async (req, res) => {
   }
 };
 
-const deleteSubscriptionById = async (req, res) => {
+const deleteSubscriptionPlanById = async (req, res) => {
   try {
     if (!req.params.id) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("Please provide subscription id"));
     }
-    const subscription = await Subscription.findByIdAndDelete(req.params.id);
-    if (!subscription) {
+    const subscriptionPlan = await SubscriptionPlan.findByIdAndDelete(
+      req.params.id
+    );
+    if (!subscriptionPlan) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("subscription not found"));
@@ -150,8 +152,9 @@ const deleteSubscriptionById = async (req, res) => {
 
     return res
       .status(HTTP_STATUS.OK)
-      .send(success("Successfully deleted subscription", subscription));
+      .send(success("Successfully deleted subscription", subscriptionPlan));
   } catch (error) {
+    console.error(error);
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .send(failure("Error deleting subscription", error.message));
@@ -289,5 +292,5 @@ module.exports = {
   getSubscriptionTimeLeftOfAUser,
   getSubscriptionTimeLeftOfAllUsers,
   updateSubscriptionById,
-  deleteSubscriptionById,
+  deleteSubscriptionPlanById,
 };
