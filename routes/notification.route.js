@@ -6,6 +6,6 @@ const {
 } = require("../controller/notification.controller");
 
 // Route to get notifications by userId
-routes.get("/get-notifications-by-user/:userId", getNotificationsByUserId);
+routes.get("/notifications-by-user/:userId", getNotificationsByUserId);
 routes.get("/get-all-notifications", getAllNotifications);
 module.exports = routes;
