@@ -122,6 +122,7 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
           .status(HTTP_STATUS.NOT_FOUND)
           .send(failure("Book not found"));
       }
+      console.log("book", book);
 
       // Check if user has already bought a book before
       const hasBoughtBefore = user.booksBought.length > 0;
@@ -157,12 +158,14 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
         } else if (subscriptionPlan === "premium") {
           user.isPremiumSubscribed = true;
         }
+        console.log("user.subscriptions bookId", user.subscriptions);
         user.booksBought.push(book._id);
       } else {
         // If user has already bought a book before, just buy the book
         user.booksBought.push(book._id);
       }
-    } else if (subscriptionPlan) {
+    }
+    if (subscriptionPlan) {
       // If no book is provided, just buy the subscription
       const subscriptionPlanDetails = await SubscriptionPlan.findOne({
         name: subscriptionPlan,
@@ -193,7 +196,9 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
       } else if (subscriptionPlan === "premium") {
         user.isPremiumSubscribed = true;
       }
-    } else {
+      console.log("user.subscriptions subscriptionPlan", user.subscriptions);
+    }
+    if (!subscriptionPlan && !bookId) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
         .send(failure("Please provide either subscriptionPlan or bookId"));
