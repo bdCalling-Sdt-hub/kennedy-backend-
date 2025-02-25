@@ -30,8 +30,10 @@ const userSchema = new mongoose.Schema(
     },
 
     subscriptions: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "SubscriptionPlan" },
+      { type: mongoose.Schema.Types.ObjectId, ref: "Subscription" },
     ],
+
+    booksBought: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
 
     isBasicSubscribed: {
       type: Boolean,
@@ -93,6 +95,10 @@ const userSchema = new mongoose.Schema(
     },
 
     bookReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+    forums: [{ type: mongoose.Schema.Types.ObjectId, ref: "Forum" }],
+    confessionsUploaded: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Confession" },
+    ],
 
     confessionComments: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },

@@ -450,7 +450,7 @@ const approveAffiliate = async (req, res) => {
         .send(failure("affiliate does not exist"));
     }
 
-    const referralCode = crypto.randomBytes(4).toString("hex");
+    const referralCode = Math.floor(1000 + Math.random() * 9000).toString();
     const referralLink = `${domain}/referral/${referralCode}`; //referralLink
 
     const newAffiliate = new Affiliate({

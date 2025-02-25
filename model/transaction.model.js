@@ -11,7 +11,10 @@ const transactionSchema = new Schema(
     subscription: {
       type: Schema.Types.ObjectId,
       ref: "Subscription",
-      required: true,
+    },
+    book: {
+      type: Schema.Types.ObjectId,
+      ref: "Book",
     },
     affiliate: {
       type: Schema.Types.ObjectId,

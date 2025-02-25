@@ -2,6 +2,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const Transaction = require("../model/transaction.model");
 const User = require("../model/user.model");
+const Book = require("../model/book.model");
 const SubscriptionPlan = require("../model/subscriptionPlan.model");
 const Subscription = require("../model/subscription.model");
 const Affiliate = require("../model/affiliate.model");
@@ -11,24 +12,7 @@ const { emailWithNodemailerGmail } = require("../config/email.config");
 
 const createPaymentIntent = async (req, res) => {
   try {
-    const { subscriptionPlan, paymentMethodId, amount } = req.body;
-
-    if (!subscriptionPlan || !paymentMethodId || !amount) {
-      return res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .send(failure("please provide all the fields"));
-    }
-
-    // Fetch the Subscription details
-    const subscription = await SubscriptionPlan.findOne({
-      name: subscriptionPlan,
-    });
-
-    if (!subscription) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("subscription not found"));
-    }
+    const { subscriptionPlan, bookId, paymentMethodId, amount } = req.body;
 
     if (!req.user || !req.user._id) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("please login"));
@@ -38,6 +22,36 @@ const createPaymentIntent = async (req, res) => {
 
     if (!user) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
+    }
+
+    if (!paymentMethodId || !amount) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("please provide all the fields"));
+    }
+
+    if (subscriptionPlan) {
+      // Fetch the Subscription details
+      const subscription = await SubscriptionPlan.findOne({
+        name: subscriptionPlan,
+      });
+
+      if (!subscription) {
+        return res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .send(failure("subscription not found"));
+      }
+    }
+
+    if (bookId) {
+      // Fetch the book details
+      const book = await Book.findById(bookId);
+
+      if (!book) {
+        return res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .send(failure("book not found"));
+      }
     }
 
     // Create a payment intent
@@ -72,13 +86,13 @@ const createPaymentIntent = async (req, res) => {
 
 const confirmPaymentbyPaymentIntent = async (req, res) => {
   try {
-    const { paymentIntentId, subscriptionPlan, affiliateCode, price } =
+    const { paymentIntentId, subscriptionPlan, bookId, affiliateCode, price } =
       req.body;
 
-    if (!paymentIntentId || !subscriptionPlan) {
+    if (!paymentIntentId) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
-        .send(failure("Please provide paymentIntentId and subscriptionPlan"));
+        .send(failure("Please provide paymentIntentId"));
     }
 
     if (!req.user || !req.user._id) {
@@ -97,14 +111,100 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
     }
 
-    const subscriptionPlanDetails = await SubscriptionPlan.findOne({
-      name: subscriptionPlan,
-    });
-    if (!subscriptionPlanDetails) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Subscription plan not found"));
+    let subscription = null;
+    let bookPurchase = null;
+
+    if (bookId) {
+      // Check if book exists
+      const book = await Book.findById(bookId);
+      if (!book) {
+        return res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .send(failure("Book not found"));
+      }
+      console.log("book", book);
+
+      // Check if user has already bought a book before
+      const hasBoughtBefore = user.booksBought.length > 0;
+
+      if (!hasBoughtBefore && subscriptionPlan) {
+        // If it's the user's first book purchase, buy them a subscription
+        const subscriptionPlanDetails = await SubscriptionPlan.findOne({
+          name: subscriptionPlan,
+        });
+
+        if (!subscriptionPlanDetails) {
+          return res
+            .status(HTTP_STATUS.NOT_FOUND)
+            .send(failure("Subscription plan not found"));
+        }
+
+        subscription = await Subscription.create({
+          subscriptionPlan: subscriptionPlanDetails._id,
+          name: subscriptionPlan,
+          paymentId: paymentIntent.id,
+          paymentStatus: "paid",
+          buyer: user._id,
+          startDate: new Date(),
+          endDate: new Date(
+            new Date().getTime() +
+              subscriptionPlanDetails.duration * 24 * 60 * 60 * 1000
+          ),
+        });
+
+        user.subscriptions.push(subscription._id);
+        if (subscriptionPlan === "basic") {
+          user.isBasicSubscribed = true;
+        } else if (subscriptionPlan === "premium") {
+          user.isPremiumSubscribed = true;
+        }
+        console.log("user.subscriptions bookId", user.subscriptions);
+        user.booksBought.push(book._id);
+      } else {
+        // If user has already bought a book before, just buy the book
+        user.booksBought.push(book._id);
+      }
     }
+    if (subscriptionPlan) {
+      // If no book is provided, just buy the subscription
+      const subscriptionPlanDetails = await SubscriptionPlan.findOne({
+        name: subscriptionPlan,
+      });
+
+      if (!subscriptionPlanDetails) {
+        return res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .send(failure("Subscription plan not found"));
+      }
+
+      subscription = await Subscription.create({
+        subscriptionPlan: subscriptionPlanDetails._id,
+        name: subscriptionPlan,
+        paymentId: paymentIntent.id,
+        paymentStatus: "paid",
+        buyer: user._id,
+        startDate: new Date(),
+        endDate: new Date(
+          new Date().getTime() +
+            subscriptionPlanDetails.duration * 24 * 60 * 60 * 1000
+        ),
+      });
+
+      user.subscriptions.push(subscription._id);
+      if (subscriptionPlan === "basic") {
+        user.isBasicSubscribed = true;
+      } else if (subscriptionPlan === "premium") {
+        user.isPremiumSubscribed = true;
+      }
+      console.log("user.subscriptions subscriptionPlan", user.subscriptions);
+    }
+    if (!subscriptionPlan && !bookId) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Please provide either subscriptionPlan or bookId"));
+    }
+
+    // Handle affiliate commission if affiliateCode is provided
     let affiliate;
     if (affiliateCode) {
       affiliate = await Affiliate.findOne({ affiliateCode });
@@ -118,69 +218,53 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
 
         affiliate.totalCommission += commission;
         affiliate.totalReferrals += 1;
-        if (affiliate.totalCommission >= 240000) {
-          affiliate.level = 1;
-        }
-        if (affiliate.totalCommission >= 500000) {
-          affiliate.level = 2;
-        }
-        if (affiliate.totalCommission >= 1000000) {
-          affiliate.level = 3;
-        }
-        if (affiliate.totalCommission >= 2000000) {
-          affiliate.level = 4;
-        }
+        if (affiliate.totalCommission >= 240000) affiliate.level = 1;
+        if (affiliate.totalCommission >= 500000) affiliate.level = 2;
+        if (affiliate.totalCommission >= 1000000) affiliate.level = 3;
+        if (affiliate.totalCommission >= 2000000) affiliate.level = 4;
         await affiliate.save();
       }
     }
 
-    const subscription = await Subscription.create({
-      subscriptionPlan: subscriptionPlanDetails._id,
-      name: subscriptionPlan,
-      paymentId: paymentIntent.id,
-      paymentStatus: "paid",
-      buyer: user._id,
-      startDate: new Date(),
-      endDate: new Date(
-        new Date().getTime() +
-          subscriptionPlanDetails.duration * 24 * 60 * 60 * 1000
-      ),
-    });
-
+    // Create a transaction record
     const transaction = new Transaction({
       user: user._id,
-      subscription: subscription._id,
       paymentId: paymentIntent.id,
       amount: paymentIntent.amount / 100,
       status: "paid",
     });
 
-    if (affiliateCode) {
+    if (bookId) {
+      transaction.book = bookId;
+    }
+
+    if (subscription) {
+      transaction.subscription = subscription._id;
+    }
+
+    if (affiliate) {
       const commission = price * 0.1; // 10% commission
       transaction.affiliate = affiliate._id;
       transaction.affiliateComission = commission;
-      subscription.affiliate = affiliate._id;
-      subscription.affiliateComission = commission;
+      if (subscription) {
+        subscription.affiliate = affiliate._id;
+        subscription.affiliateComission = commission;
+      }
     }
+
     await transaction.save();
-    await subscription.save();
-
-    user.subscriptions.push(subscription._id);
-    if (subscriptionPlan === "basic") {
-      user.isBasicSubscribed = true;
-    } else if (subscriptionPlan === "premium") {
-      user.isPremiumSubscribed = true;
-    }
     await user.save();
+    if (subscription) await subscription.save();
 
+    // Send confirmation email
     const userName = user.name || "user";
     const emailData = {
       email: user.email,
       subject: "Payment processed successfully",
       html: `
-              <h2 style="color: #007BFF; text-align: center;">Subscription Confirmed</h2>
+              <h2 style="color: #007BFF; text-align: center;">Payment Confirmed</h2>
               <p>Dear <strong>${userName}</strong>,</p>
-              <p>Your Subscription has been successfully completed</p>
+              <p>Your purchase has been successfully completed.</p>
               <p>Best regards,</p>
               <p><strong>Passenger Confession</strong></p>
             `,
@@ -388,6 +472,30 @@ const getAllTransactions = async (req, res) => {
   }
 };
 
+const getTransactionByUserId = async (req, res) => {
+  try {
+    if (!req.user || !req.user._id) {
+      return res.status(HTTP_STATUS.UNAUTHORIZED).send(failure("Please login"));
+    }
+    const transactions = await Transaction.find({
+      user: req.user._id,
+    }).populate("subscription");
+    if (!transactions) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Transactions not found"));
+    }
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Transactions retrieved successfully", transactions));
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Transactions failed", err.message));
+  }
+};
+
 const getWeeklyTransactions = (transactions) => {
   const weekly = {};
   transactions.forEach((transaction) => {
@@ -527,6 +635,7 @@ module.exports = {
   createSubscription,
   getAffiliateByCode,
   getPaymentIntent,
+  getTransactionByUserId,
   getAllPaymentIntents,
   getAllTransactions,
   getAllTransactionsByAffiliate,

@@ -3,22 +3,45 @@ const routes = express();
 const {
   createSubscription,
   getAllSubscriptionPlans,
+  getAllSubscriptions,
   getSubscriptionById,
+  getSubscriptionByUserId,
+  getSubscriptionTimeLeftOfAUser,
+  getSubscriptionTimeLeftOfAllUsers,
   updateSubscriptionById,
-  deleteSubscriptionById,
+  deleteSubscriptionPlanById,
 } = require("../controller/subscription.controller");
 
-const { isAuthorizedAdmin } = require("../middleware/authValidationJWT");
+const {
+  isAuthorizedAdmin,
+  isAuthorizedUser,
+} = require("../middleware/authValidationJWT");
 
-routes.post(
-  "/create-subscription",
-  // isAuthorizedAdmin,
-  createSubscription
-);
+routes.post("/create-subscription", isAuthorizedAdmin, createSubscription);
 
-routes.get("/get-all-subscriptions", getAllSubscriptionPlans);
+routes.get("/get-all-subscription-plans", getAllSubscriptionPlans);
+
+routes.get("/get-all-subscriptions", getAllSubscriptions);
 
 routes.get("/get-subscription-by-id/:id", getSubscriptionById);
+
+routes.get(
+  "/get-subscription-by-user-id",
+  isAuthorizedUser,
+  getSubscriptionByUserId
+);
+
+routes.get(
+  "/get-subscription-time-left-of-a-user",
+  isAuthorizedUser,
+  getSubscriptionTimeLeftOfAUser
+);
+
+routes.get(
+  "/get-subscription-time-left-of-all-users",
+  isAuthorizedAdmin,
+  getSubscriptionTimeLeftOfAllUsers
+);
 
 routes.put(
   "/update-subscription-by-id/:id",
@@ -27,9 +50,9 @@ routes.put(
 );
 
 routes.delete(
-  "/delete-subscription-by-id/:id",
+  "/delete-subscription-plan-by-id/:id",
   //   isAuthorizedAdmin,
-  deleteSubscriptionById
+  deleteSubscriptionPlanById
 );
 
 module.exports = routes;

@@ -7,13 +7,19 @@ const Comment = require("../model/comment.model");
 const fs = require("fs");
 const path = require("path");
 
-const addPost = async (req, res) => {
+const addForum = async (req, res) => {
   try {
     if (!req.user) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("Please Login to add post"));
     }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
+    }
+
+    console.log("user", user);
     const { post } = req.body;
 
     const newForum = new Forum({
@@ -27,13 +33,21 @@ const addPost = async (req, res) => {
         .send(failure("post could not be added"));
     }
 
+    user.forums.push(newForum._id);
+    await user.save();
+
     if (req.files && req.files["audioFile"]) {
       let audioFileName = "";
       if (req.files.audioFile[0]) {
-        // Add public/uploads link to the image file
-
         audioFileName = `public/uploads/audios/${req.files.audioFile[0].filename}`;
         newForum.audioPost = audioFileName;
+      }
+    }
+    if (req.files && req.files["videoFile"]) {
+      let videoFileName = "";
+      if (req.files.videoFile[0]) {
+        videoFileName = `public/uploads/videos/${req.files.videoFile[0].filename}`;
+        newForum.videoPost = videoFileName;
       }
     }
     await newForum.save();
@@ -47,7 +61,7 @@ const addPost = async (req, res) => {
   }
 };
 
-const addCommentToPost = async (req, res) => {
+const addCommentToForum = async (req, res) => {
   try {
     if (!req.user) {
       return res
@@ -129,7 +143,7 @@ const getAllCommentsOfAForum = async (req, res) => {
   }
 };
 
-const updatePostById = async (req, res) => {
+const updateForumById = async (req, res) => {
   try {
     if (!req.params.id) {
       return res
@@ -141,8 +155,6 @@ const updatePostById = async (req, res) => {
     if (!post) {
       return res.status(HTTP_STATUS.NOT_FOUND).send(failure("post not found"));
     }
-    // console.log("files", req.files);
-    // console.log("files", req.files["audioFile"]);
 
     // remove previous file from storage if new file is added
     if (req.files && req.files["audioFile"]) {
@@ -160,6 +172,25 @@ const updatePostById = async (req, res) => {
 
         audioFileName = `public/uploads/audios/${req.files.audioFile[0].filename}`;
         post.audioPost = audioFileName;
+      }
+    }
+
+    // remove previous file from storage if new file is added
+    if (req.files && req.files["videoFile"]) {
+      if (post.videoPost) {
+        try {
+          fs.unlinkSync(path.join(__dirname, "..", post.videoPost));
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      let videoFileName = "";
+      if (req.files.videoFile[0]) {
+        // Add public/uploads link to the image file
+
+        videoFileName = `public/uploads/videos/${req.files.videoFile[0].filename}`;
+        post.videoPost = videoFileName;
       }
     }
 
@@ -185,7 +216,7 @@ const updatePostById = async (req, res) => {
   }
 };
 
-const getAllPosts = async (req, res) => {
+const getAllForums = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   try {
     const skip = (page - 1) * limit;
@@ -226,7 +257,7 @@ const getAllPosts = async (req, res) => {
   }
 };
 
-const getPostById = async (req, res) => {
+const getForumById = async (req, res) => {
   try {
     if (!req.params.id) {
       return res
@@ -255,7 +286,7 @@ const getPostById = async (req, res) => {
   }
 };
 
-const getPostByUserId = async (req, res) => {
+const getForumByUserId = async (req, res) => {
   try {
     if (!req.user || !req.user._id) {
       return res
@@ -282,7 +313,7 @@ const getPostByUserId = async (req, res) => {
   }
 };
 
-const deletePostById = async (req, res) => {
+const deleteForumById = async (req, res) => {
   try {
     if (!req.params.id) {
       return res
@@ -302,6 +333,14 @@ const deletePostById = async (req, res) => {
       }
     }
 
+    if (post.videoPost) {
+      try {
+        fs.unlinkSync(path.join(__dirname, "..", post.videoPost));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
     return res
       .status(HTTP_STATUS.OK)
       .send(success("Successfully deleted post", post));
@@ -313,12 +352,12 @@ const deletePostById = async (req, res) => {
 };
 
 module.exports = {
-  addPost,
-  addCommentToForum: addCommentToPost,
-  getAllPosts,
+  addForum,
+  addCommentToForum,
+  getAllForums,
   getAllCommentsOfAForum,
-  getPostById,
-  getPostByUserId,
-  updatePostById,
-  deletePostById,
+  getForumById,
+  getForumByUserId,
+  updateForumById,
+  deleteForumById,
 };

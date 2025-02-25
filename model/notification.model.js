@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema(
   {
-    applicant: {
+    uploader: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: false, // The user applying for the doctor role
@@ -12,10 +12,13 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: false, // The admin managing the application
     },
-    serviceId: {
+    confession: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Service",
-      required: false,
+      ref: "Confession",
+    },
+    forum: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Forum",
     },
     status: {
       type: String,
@@ -36,7 +39,7 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["service", "appointment", "others"],
+      enum: ["confession", "forum", "others"],
       default: "others",
     },
   },
