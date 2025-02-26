@@ -275,7 +275,7 @@ const getSubscriptionTimeLeftOfAllUsers = async (req, res) => {
           subscriptionTimeLeft / (1000 * 60 * 60 * 24)
         );
         const hoursLeft = Math.ceil(subscriptionTimeLeft / (1000 * 60 * 60));
-        const monthsLeft = Math.ceil(daysLeft / 30);
+        const monthsLeft = Math.floor(daysLeft / 30);
         const yearsLeft = monthsLeft / 12;
 
         return {
