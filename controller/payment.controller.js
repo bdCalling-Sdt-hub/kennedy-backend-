@@ -209,19 +209,38 @@ const confirmPaymentbyPaymentIntent = async (req, res) => {
     if (affiliateCode) {
       affiliate = await Affiliate.findOne({ affiliateCode });
       if (affiliate && affiliate.stripeAccountId) {
-        const commission = price * 0.1; // 10% commission
-        await stripe.transfers.create({
-          amount: commission * 100,
+        let amountToAdd = 0;
+        if (affiliate.level <= 1) amountToAdd = 1.5;
+        if (affiliate.level === 2) amountToAdd = 3;
+        if (affiliate.level === 3) amountToAdd = 5;
+        if (affiliate.level === 4) amountToAdd = 7;
+
+        const transfer = await stripe.transfers.create({
+          amount: amountToAdd * 100,
           currency: paymentIntent.currency,
           destination: affiliate.stripeAccountId,
         });
 
-        affiliate.totalCommission += commission;
+        console.log("transfer", transfer);
+
+        affiliate.totalCommission += amountToAdd;
         affiliate.totalReferrals += 1;
-        if (affiliate.totalCommission >= 240000) affiliate.level = 1;
-        if (affiliate.totalCommission >= 500000) affiliate.level = 2;
-        if (affiliate.totalCommission >= 1000000) affiliate.level = 3;
-        if (affiliate.totalCommission >= 2000000) affiliate.level = 4;
+        if (affiliate.totalReferrals <= 250000) affiliate.level = 1;
+        if (
+          affiliate.totalReferrals >= 250001 &&
+          affiliate.totalReferrals <= 500000
+        )
+          affiliate.level = 2;
+        if (
+          affiliate.totalReferrals >= 500001 &&
+          affiliate.totalReferrals <= 1000000
+        )
+          affiliate.level = 3;
+        if (
+          affiliate.totalReferrals >= 1000001 &&
+          affiliate.totalReferrals <= 2000000
+        )
+          affiliate.level = 4;
         await affiliate.save();
       }
     }

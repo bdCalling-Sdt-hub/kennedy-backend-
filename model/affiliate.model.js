@@ -26,7 +26,7 @@ const Affiliate = new Schema(
     },
     level: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     subscriptions: [
       { type: mongoose.Schema.Types.ObjectId, ref: "SubscriptionPlan" },
