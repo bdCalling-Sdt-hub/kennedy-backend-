@@ -25,6 +25,7 @@ const aboutUsRouter = require("./routes/aboutUs.route");
 const forumRouter = require("./routes/forum.route");
 const subscriptionRouter = require("./routes/subscription.route");
 const commentRouter = require("./routes/comment.route");
+const affiliateRouter = require("./routes/affiliate.route");
 
 const app = express();
 
@@ -76,6 +77,7 @@ app.use("/about-us", aboutUsRouter);
 app.use("/forum", forumRouter);
 app.use("/subscription", subscriptionRouter);
 app.use("/comment", commentRouter);
+app.use("/affiliate", affiliateRouter);
 
 // Route to handle all other invalid requests
 
